@@ -285,3 +285,6 @@ timestamp-based naming convention.
 51. Add support for one-off relay competitors and their member athletes:
     - [V20260830.001__create-relay-entry-table-h2.sql](migration/ddl/h2/V20260830.001__create-relay-entry-table-h2.sql)
     - [V20260830.001__create-relay-entry-table-postgres.sql](migration/ddl/postgres/V20260830.001__create-relay-entry-table-postgres.sql)
+52. Improve data quality:
+    - [V20260918.001__improve-data-quality-h2.sql](migration/dml/h2/V20260918.001__improve-data-quality-h2.sql)
+    - [V20260918.001__improve-data-quality-postgres.sql](migration/dml/postgres/V20260918.001__improve-data-quality-postgres.sql)
