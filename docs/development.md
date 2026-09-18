@@ -283,6 +283,122 @@ Once all the commands were executes, exit the PostgreSQL server:
 \q
 ```
 
+### Dropping the Database, Schema, and Application User
+
+To start fresh from a clean slate (e.g., after many incremental Flyway migrations, to reset
+corrupted data, or to exercise the whole setup again), the database, schema, and application user
+created in the [previous section](#database-schema-and-application-user-setup) can be dropped and
+recreated. The steps below reverse, in order, those setup steps.
+
+> **Warning:**
+>
+> All commands in this section are **destructive and irreversible**. The database, schema,
+> and application user are permanently removed. Ensure the application is stopped and that you
+> no longer need any of the stored data before proceeding.
+
+1. **Stop the application**
+
+    Ensure that no instance of the **EnduranceTrio** application is running, so that no active
+    connections are held on the database:
+
+    - Stop the `EnduranceTrioApplication` run configuration in IntelliJ, or
+    - Interrupt the `./launch-app.sh` process started in a terminal.
+
+2. **Login into the PostgreSQL server** as an administrator:
+
+    ```shell
+    sudo -u postgres psql
+    ```
+
+3. **Drop the database**
+
+    Replace the placeholder in the below command as appropriate and execute it to
+    [drop](https://www.postgresql.org/docs/current/sql-dropdatabase.html) the **EnduranceTrio**
+    database. The `WITH (FORCE)` option (PostgreSQL 13 or later) automatically terminates any
+    lingering connections that would otherwise block the drop:
+
+    ```sql
+    DROP DATABASE IF EXISTS {DATABASE_NAME} WITH (FORCE);
+    ```
+
+    > **Placeholder Definition**
+    >
+    > + **{DATABASE_NAME}** : The name chosen for the new database;
+
+    Confirm that the database was dropped:
+
+    ```sql
+    \l
+    ```
+
+    > **Note:**
+    >
+    > Dropping the database also removes the application schema and all its objects (tables,
+    > sequences, indexes, and the `pg_trgm` extension installed in that schema), so no separate
+    > schema or extension cleanup is required.
+
+    For PostgreSQL versions older than 13, terminate active connections manually before dropping
+    the database:
+
+    ```sql
+    SELECT pg_terminate_backend(pid)
+    FROM pg_stat_activity
+    WHERE datname = '{DATABASE_NAME}' AND pid <> pg_backend_pid();
+    ```
+
+4. **Drop the application user**
+
+    Replace the placeholder in the below command as appropriate and execute it to
+    [drop](https://www.postgresql.org/docs/current/sql-dropuser.html) the **EnduranceTrio**
+    database/schema management user:
+
+    ```sql
+    DROP ROLE IF EXISTS {USERNAME};
+    ```
+
+    > **Placeholder Definition**
+    >
+    > + **{USERNAME}** : The account name in the PostgreSQL Server;
+
+    Confirm that the user was dropped:
+
+    ```sql
+    \du
+    ```
+
+    If the drop fails with *"cannot be dropped because some objects depend on it"* (for example,
+    because the user owns objects in another database), first reassign or drop those objects while
+    still connected as an administrator, and then retry:
+
+    ```sql
+    REASSIGN OWNED BY {USERNAME} TO postgres;
+    DROP OWNED BY {USERNAME};
+    DROP ROLE IF EXISTS {USERNAME};
+    ```
+
+5. **Exit the PostgreSQL server**
+
+    ```sql
+    \q
+    ```
+
+6. **Recreate the database, schema, and application user**
+
+    Follow the [Database, Schema, and Application User Setup](#database-schema-and-application-user-setup)
+    section to recreate the database, schema, `pg_trgm` extension, and user from scratch. Flyway
+    then recreates all tables and baseline data on the next application startup.
+
+    To recreate the initial tracker account on startup, set the `FIRST_OWNER` and `FIRST_HASH`
+    environment variables again before starting the application (see the
+    [Initialize First Account via Environment Variables](#initialize-first-account-via-environment-variables)
+    section).
+
+    > **Note:**
+    >
+    > For local development the default values are the database `dev_endurancetrio_community` set in
+    > `application-local.yaml` and the schema `endurancetrio_hub` set in `application.yaml`. The
+    > database user is the one configured in `application-secrets.yaml`.
+
 ### Troubleshooting
 
 **Connection refused**: Ensure PostgreSQL is running:
