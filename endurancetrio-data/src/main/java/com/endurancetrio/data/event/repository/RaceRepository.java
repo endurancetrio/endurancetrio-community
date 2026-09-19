@@ -81,7 +81,7 @@ public interface RaceRepository extends JpaRepository<@NonNull Race, @NonNull Lo
    */
   @Query(
       value = "SELECT r.id FROM Race r "
-          + "WHERE r.raceType NOT IN ('INDIVIDUAL_DERIVED', 'TEAM_RELAY_DERIVED', 'MIXED_RELAY_DERIVED') "
+          + "WHERE r.raceType NOT IN ('INDIVIDUAL_DERIVED', 'TEAM_RELAY_DERIVED', 'MIXED_RELAY_DERIVED', 'TEAM_BY_RANK', 'TEAM_BY_TIME', 'TEAM_BY_POINTS', 'TEAM_RELAY_PARENT', 'MIXED_RELAY_PARENT') "
           + "AND (r.id IN (SELECT ir.race.id FROM IndividualResult ir) "
           + "OR r.id IN (SELECT tr.race.id FROM TeamResult tr)) "
           + "ORDER BY COALESCE("
@@ -89,7 +89,7 @@ public interface RaceRepository extends JpaRepository<@NonNull Race, @NonNull Lo
           + "  (SELECT MAX(tr2.createdAt) FROM TeamResult tr2 WHERE tr2.race = r)"
           + ") DESC, r.id DESC",
       countQuery = "SELECT COUNT(r.id) FROM Race r "
-          + "WHERE r.raceType NOT IN ('INDIVIDUAL_DERIVED', 'TEAM_RELAY_DERIVED', 'MIXED_RELAY_DERIVED') "
+          + "WHERE r.raceType NOT IN ('INDIVIDUAL_DERIVED', 'TEAM_RELAY_DERIVED', 'MIXED_RELAY_DERIVED', 'TEAM_BY_RANK', 'TEAM_BY_TIME', 'TEAM_BY_POINTS', 'TEAM_RELAY_PARENT', 'MIXED_RELAY_PARENT') "
           + "AND (r.id IN (SELECT ir.race.id FROM IndividualResult ir) "
           + "OR r.id IN (SELECT tr.race.id FROM TeamResult tr))"
   )
