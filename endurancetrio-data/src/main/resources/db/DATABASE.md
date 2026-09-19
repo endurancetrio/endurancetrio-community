@@ -288,3 +288,5 @@ timestamp-based naming convention.
 52. Improve data quality:
     - [V20260918.001__improve-data-quality-h2.sql](migration/dml/h2/V20260918.001__improve-data-quality-h2.sql)
     - [V20260918.001__improve-data-quality-postgres.sql](migration/dml/postgres/V20260918.001__improve-data-quality-postgres.sql)
+53. Inserts the the São Martinho do Porto Triathlon insight article:
+    - [V20260919.001__insert-sao-martinho-insight-article-postgres.sql](migration/dml/postgres/V20260919.001__insert-sao-martinho-insight-article-postgres.sql)

@@ -214,6 +214,71 @@ class EventServiceMainTest {
   }
 
   @Test
+  void getEventsByIdsShouldReturnEventsOrderedByStartDateDescending() {
+    Event event1 = createEvent(1L, "Event 1", LocalDate.of(1984, Month.AUGUST, 1),
+        LocalDate.of(1984, Month.AUGUST, 1),
+        "City1", "County1", "District1", Set.of(createCourse(Sport.TRIATHLON))
+    );
+    Event event2 = createEvent(2L, "Event 2", LocalDate.of(1984, Month.AUGUST, 15),
+        LocalDate.of(1984, Month.AUGUST, 15),
+        "City2", "County2", "District2", Set.of(createCourse(Sport.DUATHLON))
+    );
+
+    EventDTO expectedDTO1 = new EventDTO(1L, "Event 1", LocalDate.of(1984, Month.AUGUST, 1),
+        LocalDate.of(1984, Month.AUGUST, 1), "City1", "County1", "District1",
+        List.of("TRIATHLON")
+    );
+    EventDTO expectedDTO2 = new EventDTO(2L, "Event 2", LocalDate.of(1984, Month.AUGUST, 15),
+        LocalDate.of(1984, Month.AUGUST, 15), "City2", "County2", "District2",
+        List.of("DUATHLON")
+    );
+
+    when(eventRepository.findEventsByIdInWithCourses(List.of(1L, 2L))).thenReturn(
+        List.of(event1, event2));
+    when(eventMapper.mapToEventDTO(event1)).thenReturn(expectedDTO1);
+    when(eventMapper.mapToEventDTO(event2)).thenReturn(expectedDTO2);
+
+    List<EventDTO> result = underTest.getEventsByIds(List.of(1L, 2L));
+
+    assertNotNull(result);
+    assertEquals(2, result.size());
+    assertEquals(expectedDTO2, result.get(0));
+    assertEquals(expectedDTO1, result.get(1));
+  }
+
+  @Test
+  void getEventsByIdsShouldReturnEmptyList() {
+    when(eventRepository.findEventsByIdInWithCourses(List.of(1L))).thenReturn(List.of());
+
+    List<EventDTO> result = underTest.getEventsByIds(List.of(1L));
+
+    assertNotNull(result);
+    assertEquals(List.of(), result);
+  }
+
+  @Test
+  void getEventsByIdsShouldExcludeMissingEvents() {
+    Event event1 = createEvent(1L, "Event 1", LocalDate.of(1984, Month.AUGUST, 15),
+        LocalDate.of(1984, Month.AUGUST, 15),
+        "City1", "County1", "District1", Set.of(createCourse(Sport.TRIATHLON))
+    );
+
+    EventDTO expectedDTO1 = new EventDTO(1L, "Event 1", LocalDate.of(1984, Month.AUGUST, 15),
+        LocalDate.of(1984, Month.AUGUST, 15), "City1", "County1", "District1",
+        List.of("TRIATHLON")
+    );
+
+    when(eventRepository.findEventsByIdInWithCourses(List.of(1L, 2L))).thenReturn(List.of(event1));
+    when(eventMapper.mapToEventDTO(event1)).thenReturn(expectedDTO1);
+
+    List<EventDTO> result = underTest.getEventsByIds(List.of(1L, 2L));
+
+    assertNotNull(result);
+    assertEquals(1, result.size());
+    assertEquals(expectedDTO1, result.getFirst());
+  }
+
+  @Test
   void getMostRecentAddedEventsShouldReturnEventsWithSportCodes() {
     Event event1 = createEvent(1L, "Event 1", LocalDate.of(2026, Month.JULY, 10),
         LocalDate.of(2026, Month.JULY, 10), "City1", "County1", "District1",

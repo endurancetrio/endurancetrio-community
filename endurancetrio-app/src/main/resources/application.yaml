@@ -21,6 +21,8 @@
 app:
   copyright-year: 2011-2026
   featured-article-ids: ${FEATURED_ARTICLE_IDS:1,2}
+  featured-event-article-id: ${FEATURED_EVENT_ARTICLE_ID:3}
+  featured-event-ids: ${FEATURED_EVENT_IDS:300001,300002,300003,300004}
   initialization:
     first-account-owner: ${FIRST_OWNER:}
     first-account-key-hash: ${FIRST_HASH:}

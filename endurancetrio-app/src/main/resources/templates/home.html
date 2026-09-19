@@ -63,7 +63,7 @@
                data-th-text="#{page.home.button.mission}"
                class="button is-dark">
             </a>
-            <a data-th-href="@{/{language}/events/1984/1/overview(language=${language})}"
+            <a data-th-href="@{/{language}/events(language=${language})}"
                data-th-text="#{page.home.button.explore}"
                class="button is-link">
             </a>
@@ -79,6 +79,78 @@
   </section>
 
   <div class="hero is-medium has-background-grey-100">
+    <div class="hero-body">
+      <h2 data-th-text="#{page.home.featured-events.title}" class="title is-2 mb-6"></h2>
+
+      <div data-th-if="${#lists.isEmpty(featuredEvents)}" data-th-remove="tag">
+        <p data-th-text="#{page.insights.empty}" class="subtitle"></p>
+      </div>
+
+      <div data-th-unless="${#lists.isEmpty(featuredEvents)}" data-th-remove="tag">
+        <div class="columns is-desktop is-6 is-vcentered">
+          <div class="column">
+            <a data-th-if="${featuredEventArticle != null}"
+               data-th-href="@{/{lang}/insights/{slug}(lang=${language}, slug=${featuredEventArticle.slug})}"
+               class="is-clickable"
+            >
+              <div class="endurance-card">
+                <div data-th-if="${featuredEventArticle.featuredImage != null}" class="card-image">
+                  <figure class="image">
+                    <img data-th-src="${featuredEventArticle.featuredImage}"
+                         data-th-alt="${featuredEventArticle.title}"
+                         alt="Article Title"/>
+                  </figure>
+                </div>
+                <div data-th-unless="${featuredEventArticle.featuredImage != null}" class="card-image">
+                  <figure class="image">
+                    <img data-th-src="@{/img/endurancetrio-open-graph.png}"
+                         data-th-alt="${featuredEventArticle.title}"
+                         alt="Article Title"/>
+                  </figure>
+                </div>
+                <div class="card-content">
+                  <div class="mb-3">
+                    <p data-th-text="${featuredEventArticle.title}" class="title is-3"></p>
+                    <p data-th-text="${featuredEventArticle.authorName}" class="subtitle is-5"></p>
+                  </div>
+                  <p data-th-utext="${featuredEventArticle.introText}" data-th-remove="tag"></p>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="column">
+            <div data-th-each="event : ${featuredEvents}" class="endurance-box is-branded-thin">
+              <a data-th-href="@{/{lang}/events/{year}/{id}/overview(lang=${language}, year=${#temporals.year(event.startDate)}, id=${event.id})}"
+                 class="is-clickable"
+              >
+                <article class="media">
+                  <div class="media-left">
+                    <div data-th-replace="~{fragments/calendar :: date-ddmmyyyy(date=${event.startDate})}">
+                    </div>
+                  </div>
+                  <div class="media-content">
+                    <div class="content">
+                      <span data-th-text="${event.title}" class="title is-4"></span>
+                      <br>
+                      <span class="has-text-grey"
+                            data-th-text="${event.city} + ', ' + ${event.county} + ' (' + ${event.district} + ')'"
+                      ></span>
+                      <div class="tags mt-2" data-th-if="${!#lists.isEmpty(event.sportCodes)}"><span class="tag is-link is-light" data-th-each="sportCode : ${event.sportCodes}" data-th-text="#{sport.__${sportCode}__}"
+                      >
+                      </span>
+                      </div>
+                    </div>
+                  </div>
+                </article>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero is-medium">
     <div class="hero-body">
       <h2 data-th-text="#{page.home.featured-articles.title}" class="title is-2 mb-6"></h2>
 
@@ -122,7 +194,7 @@
     </div>
   </div>
 
-  <div class="hero is-medium">
+  <div class="hero is-medium has-background-grey-100">
     <div class="hero-body">
       <h2 data-th-text="#{page.home.latest-results.title}" class="title is-2 mb-2"></h2>
       <p data-th-text="#{page.home.latest-results.subtitle}" class="subtitle is-5 has-text-grey mb-6"></p>
@@ -164,7 +236,7 @@
     </div>
   </div>
 
-  <div class="hero is-medium has-background-grey-100">
+  <div class="hero is-medium">
     <div class="hero-body">
       <h2 data-th-text="#{page.home.latest-events.title}" class="title is-2 mb-2"></h2>
       <p data-th-text="#{page.home.latest-events.subtitle}" class="subtitle is-5 has-text-grey mb-6"></p>

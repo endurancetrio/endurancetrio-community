@@ -30,6 +30,7 @@ import com.endurancetrio.business.event.dto.EventsPageDTO;
 import com.endurancetrio.business.event.mapper.EventMapper;
 import com.endurancetrio.data.event.model.entity.Event;
 import com.endurancetrio.data.event.repository.EventRepository;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -83,6 +84,18 @@ public class EventServiceMain implements EventService {
     });
 
     return eventMapper.mapToEventOverviewDTO(event);
+  }
+
+  @Override
+  @Transactional(readOnly = true)
+  public List<EventDTO> getEventsByIds(List<Long> ids) {
+    var entities = eventRepository.findEventsByIdInWithCourses(ids);
+
+    return entities.stream()
+        .map(eventMapper::mapToEventDTO)
+        .filter(Objects::nonNull)
+        .sorted(Comparator.comparing(EventDTO::startDate).reversed())
+        .toList();
   }
 
   @Override

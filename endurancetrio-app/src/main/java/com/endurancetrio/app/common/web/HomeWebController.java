@@ -29,6 +29,7 @@ import com.endurancetrio.app.common.model.PageMetadata;
 import com.endurancetrio.app.common.service.MessageService;
 import com.endurancetrio.app.common.utils.PageMetadataUtils;
 import com.endurancetrio.app.config.AppProperties;
+import com.endurancetrio.business.event.dto.EventDTO;
 import com.endurancetrio.business.event.dto.EventsPageDTO;
 import com.endurancetrio.business.event.dto.RaceDTO;
 import com.endurancetrio.business.event.service.EventService;
@@ -50,6 +51,8 @@ public class HomeWebController {
   private static final String VIEW_HOME = "home";
 
   private static final String ATTRIBUTE_EVENTS = "latestEvents";
+  private static final String ATTRIBUTE_FEATURED_EVENTS = "featuredEvents";
+  private static final String ATTRIBUTE_FEATURED_EVENT_ARTICLE = "featuredEventArticle";
   private static final String ATTRIBUTE_INSIGHTS = "featuredArticles";
   private static final String ATTRIBUTE_RACES = "latestRaces";
 
@@ -88,6 +91,17 @@ public class HomeWebController {
         appProperties.getFeaturedArticleIds(), locale
     );
 
+    List<ArticleDTO> featuredEventArticles = insightService.getArticlesByIds(
+        List.of(appProperties.getFeaturedEventArticleId()), locale
+    );
+    ArticleDTO featuredEventArticle = featuredEventArticles.isEmpty()
+        ? null
+        : featuredEventArticles.getFirst();
+
+    List<EventDTO> featuredEvents = eventService.getEventsByIds(
+        appProperties.getFeaturedEventIds()
+    );
+
     List<RaceDTO> latestRaces = raceService
         .getNonDerivedRacesWithMostRecentAddedResults(PageRequest.of(0, RECENT_RACES_SIZE))
         .getContent();
@@ -99,6 +113,8 @@ public class HomeWebController {
     model.addAttribute(LANGUAGE, locale.getLanguage());
     model.addAttribute(METADATA, metadata);
     model.addAttribute(ATTRIBUTE_INSIGHTS, featuredArticles);
+    model.addAttribute(ATTRIBUTE_FEATURED_EVENT_ARTICLE, featuredEventArticle);
+    model.addAttribute(ATTRIBUTE_FEATURED_EVENTS, featuredEvents);
     model.addAttribute(ATTRIBUTE_RACES, latestRaces);
     model.addAttribute(ATTRIBUTE_EVENTS, latestEvents.events());
 

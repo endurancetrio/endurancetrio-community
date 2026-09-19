@@ -67,6 +67,17 @@ public interface EventService {
   EventOverviewDTO getEventOverview(Long id, int year);
 
   /**
+   * Returns a list of {@link EventDTO events} for the given IDs, ordered by their start date
+   * descending, from the most recent to the oldest. Events that are not found are silently
+   * excluded. Courses are eagerly fetched to derive sport codes without additional queries.
+   *
+   * @param ids the list of event IDs to fetch
+   * @return a list of {@link EventDTO events} matching the given IDs, ordered by start date
+   *         descending
+   */
+  List<EventDTO> getEventsByIds(List<Long> ids);
+
+  /**
    * Returns an {@link EventsPageDTO} containing the most recently added {@link EventDTO events},
    * ordered by their creation timestamp descending. Courses are eagerly fetched to derive sport
    * codes without additional queries.

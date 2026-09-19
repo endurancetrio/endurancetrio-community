@@ -30,6 +30,8 @@ public class AppProperties {
 
   private String copyrightYear;
   private List<Long> featuredArticleIds;
+  private Long featuredEventArticleId;
+  private List<Long> featuredEventIds;
   private Google google = new Google();
   private KoFi kofi = new KoFi();
   private OpenGraph openGraph = new OpenGraph();
@@ -51,6 +53,22 @@ public class AppProperties {
 
   public void setFeaturedArticleIds(List<Long> featuredArticleIds) {
     this.featuredArticleIds = featuredArticleIds;
+  }
+
+  public Long getFeaturedEventArticleId() {
+    return featuredEventArticleId;
+  }
+
+  public void setFeaturedEventArticleId(Long featuredEventArticleId) {
+    this.featuredEventArticleId = featuredEventArticleId;
+  }
+
+  public List<Long> getFeaturedEventIds() {
+    return featuredEventIds;
+  }
+
+  public void setFeaturedEventIds(List<Long> featuredEventIds) {
+    this.featuredEventIds = featuredEventIds;
   }
 
   public Google getGoogle() {

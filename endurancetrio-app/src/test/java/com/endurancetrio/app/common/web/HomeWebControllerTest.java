@@ -36,9 +36,11 @@ import com.endurancetrio.business.event.dto.EventsPageDTO;
 import com.endurancetrio.business.event.dto.RaceDTO;
 import com.endurancetrio.business.event.service.EventService;
 import com.endurancetrio.business.event.service.RaceService;
+import com.endurancetrio.business.insight.dto.ArticleDTO;
 import com.endurancetrio.business.insight.service.InsightService;
 import com.endurancetrio.data.event.model.enumerator.RaceType;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -57,6 +59,13 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 class HomeWebControllerTest {
 
   private static final LocalDate EVENT_DATE = LocalDate.of(1984, Month.AUGUST, 15);
+
+  private static final ArticleDTO ARTICLE_DTO = new ArticleDTO(3L,
+      "the-origins-of-portuguese-triathlon", "The Origins of Portuguese Triathlon",
+      "A retrospective", "<p>How it all began.</p>", null, "Ricardo do Canto",
+      LocalDateTime.of(2026, Month.SEPTEMBER, 1, 10, 0), "/img/article.png", 1200, 628, null,
+      null, "en"
+  );
 
   private static final EventDTO EVENT_DTO = new EventDTO(1L, "Triatlo de Peniche", EVENT_DATE,
       EVENT_DATE, "Peniche", "Peniche", "Leiria", List.of("TRIATHLON")
@@ -104,6 +113,9 @@ class HomeWebControllerTest {
   @BeforeEach
   void setUp() {
     appProperties = new AppProperties();
+    appProperties.setFeaturedArticleIds(List.of(1L, 2L));
+    appProperties.setFeaturedEventArticleId(3L);
+    appProperties.setFeaturedEventIds(List.of(300001L, 300002L, 300003L, 300004L));
     appProperties.getOpenGraph().setDefaultImg("/img/endurancetrio-open-graph.png");
     appProperties.getOpenGraph().setDefaultImgWidth(1200);
     appProperties.getOpenGraph().setDefaultImgHeight(628);
@@ -129,7 +141,8 @@ class HomeWebControllerTest {
         "Home - EnduranceTrio");
     when(messageService.getMessage(eq("page.home.metadata.description"), any(), any())).thenReturn(
         "The central hub");
-    when(insightService.getArticlesByIds(any(), any())).thenReturn(List.of());
+    when(insightService.getArticlesByIds(any(), any())).thenReturn(List.of(ARTICLE_DTO));
+    when(eventService.getEventsByIds(any())).thenReturn(List.of());
     when(raceService.getNonDerivedRacesWithMostRecentAddedResults(
         any(PageRequest.class))).thenReturn(RACE_PAGE);
     when(eventService.getMostRecentAddedEvents(any(PageRequest.class))).thenReturn(EVENTS_PAGE);
@@ -139,6 +152,8 @@ class HomeWebControllerTest {
         .andExpect(view().name("home"))
         .andExpect(model().attributeExists("metadata"))
         .andExpect(model().attribute("language", "en"))
+        .andExpect(model().attributeExists("featuredEventArticle"))
+        .andExpect(model().attributeExists("featuredEvents"))
         .andExpect(model().attributeExists("latestRaces"))
         .andExpect(model().attributeExists("latestEvents"));
   }
@@ -149,7 +164,8 @@ class HomeWebControllerTest {
         "Início - EnduranceTrio");
     when(messageService.getMessage(eq("page.home.metadata.description"), any(), any())).thenReturn(
         "A plataforma central");
-    when(insightService.getArticlesByIds(any(), any())).thenReturn(List.of());
+    when(insightService.getArticlesByIds(any(), any())).thenReturn(List.of(ARTICLE_DTO));
+    when(eventService.getEventsByIds(any())).thenReturn(List.of());
     when(raceService.getNonDerivedRacesWithMostRecentAddedResults(
         any(PageRequest.class))).thenReturn(RACE_PAGE);
     when(eventService.getMostRecentAddedEvents(any(PageRequest.class))).thenReturn(EVENTS_PAGE);
@@ -166,7 +182,8 @@ class HomeWebControllerTest {
         "Home - EnduranceTrio");
     when(messageService.getMessage(eq("page.home.metadata.description"), any(), any())).thenReturn(
         "The central hub");
-    when(insightService.getArticlesByIds(any(), any())).thenReturn(List.of());
+    when(insightService.getArticlesByIds(any(), any())).thenReturn(List.of(ARTICLE_DTO));
+    when(eventService.getEventsByIds(any())).thenReturn(List.of());
     when(raceService.getNonDerivedRacesWithMostRecentAddedResults(
         any(PageRequest.class))).thenReturn(RACE_PAGE_EMPTY);
     when(eventService.getMostRecentAddedEvents(any(PageRequest.class))).thenReturn(
@@ -175,6 +192,8 @@ class HomeWebControllerTest {
     mockMvc.perform(get("/en/"))
         .andExpect(status().isOk())
         .andExpect(view().name("home"))
+        .andExpect(model().attributeExists("featuredEventArticle"))
+        .andExpect(model().attributeExists("featuredEvents"))
         .andExpect(model().attributeExists("latestRaces"))
         .andExpect(model().attributeExists("latestEvents"));
   }
