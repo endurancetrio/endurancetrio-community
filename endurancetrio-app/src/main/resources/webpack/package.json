@@ -1,6 +1,6 @@
 {
   "name": "endurancetrio-community",
-  "version": "0.3.4",
+  "version": "0.3.5",
   "description": "A central hub for endurance sports data and resources",
   "type": "module",
   "main": "index.js",

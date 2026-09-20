@@ -26,7 +26,7 @@
   <parent>
     <groupId>com.endurancetrio</groupId>
     <artifactId>endurancetrio-community</artifactId>
-    <version>0.3.4</version>
+    <version>0.3.5</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
 
