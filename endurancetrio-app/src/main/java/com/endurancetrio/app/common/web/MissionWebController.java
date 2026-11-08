@@ -51,6 +51,12 @@ public class MissionWebController {
     this.appProperties = appProperties;
   }
 
+  @GetMapping("/{language:en|pt}/about")
+  public String redirectAboutToMission(@PathVariable String language) {
+
+    return WebUtils.redirect(language, "/mission");
+  }
+
   @GetMapping("/{language:en|pt}/mission")
   public String mission(@PathVariable String language, HttpServletRequest request, Model model) {
     Locale locale = "pt".equalsIgnoreCase(language) ? LOCALE_PORTUGUESE : Locale.ENGLISH;
@@ -65,11 +71,5 @@ public class MissionWebController {
     model.addAttribute(METADATA, metadata);
 
     return VIEW;
-  }
-
-  @GetMapping("/{language:en|pt}/about")
-  public String redirectAboutToMission(@PathVariable String language) {
-
-    return WebUtils.redirect(language, "/mission");
   }
 }

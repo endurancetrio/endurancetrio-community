@@ -75,14 +75,14 @@ public class NewsletterWebController {
     this.newsletterService = newsletterService;
   }
 
+  @GetMapping("/{language:en|pt}/newsletter/confirmed")
+  public String confirmed(@PathVariable String language, HttpServletRequest request, Model model) {
+    return renderView(VIEW_CONFIRMED, language, request, model);
+  }
+
   @GetMapping("/{language:en|pt}/newsletter/error")
   public String error(@PathVariable String language, HttpServletRequest request, Model model) {
     return renderView(VIEW_ERROR, language, request, model);
-  }
-
-  @GetMapping("/{language:en|pt}/newsletter/success")
-  public String success(@PathVariable String language, HttpServletRequest request, Model model) {
-    return renderView(VIEW_SUCCESS, language, request, model);
   }
 
   @PostMapping("/{language:en|pt}/newsletter/subscribe")
@@ -115,9 +115,9 @@ public class NewsletterWebController {
     }
   }
 
-  @GetMapping("/{language:en|pt}/newsletter/confirmed")
-  public String confirmed(@PathVariable String language, HttpServletRequest request, Model model) {
-    return renderView(VIEW_CONFIRMED, language, request, model);
+  @GetMapping("/{language:en|pt}/newsletter/success")
+  public String success(@PathVariable String language, HttpServletRequest request, Model model) {
+    return renderView(VIEW_SUCCESS, language, request, model);
   }
 
   private static String extractDomain(String email) {

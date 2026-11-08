@@ -738,18 +738,23 @@ public class UserWebController {
 }
 ```
 
-##### Web Layer Method Ordering
+##### Web Layer Endpoint Method Ordering
 
-To facilitate navigation between the code and the live documentation, the order of the methods
-within the Controller implementation must strictly follow the display order
-of the Swagger/OpenAPI web page.
+To make a controller easy to navigate, endpoint methods must use one deterministic route order.
+This rule applies equally to REST controllers and web/Thymeleaf controllers; it does not depend on
+whether a project renders an OpenAPI page.
 
-- **Sequence**: Methods should appear in the class in the same sequence they are rendered in the UI
-  (typically sorted by path and then by HTTP verb: `GET`, `POST`, `PUT`, `DELETE`).
-    - *Example*: A `GET` request for `/users` must appear before a `GET` request for `/users/{id}`.
-    - *Example*: `/users/active` must appear before `/users/{id}`.
-- **Grouping**: Do not scatter related endpoints; keep the code structure linear
-  to the documentation output.
+- **Route sequence**: order methods by request path, with the root path first, static path segments
+  before parameterized segments, and shorter paths before their descendants.
+    - *Example*: `GET /users` appears before `GET /users/{id}`.
+    - *Example*: `/users/active` appears before `/users/{id}`.
+- **HTTP verb sequence**: when multiple methods use the same path, order them `GET`, `POST`, `PUT`,
+  `PATCH`, `DELETE`.
+- **Grouping**: keep related endpoint methods together; do not scatter methods for the same route
+  across the class.
+- **Helpers**: place private helper methods after all endpoint methods and order them alphabetically.
+- **Documentation**: keep each mapping annotation and its Javadoc directly attached to the method it
+  documents when moving methods.
 
 #### Service Layer
 
