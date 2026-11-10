@@ -1,0 +1,58 @@
+/*
+ * Copyright (c) 2011-2026 Ricardo do Canto
+ *
+ * This file is part of the EnduranceTrio project.
+ *
+ * Licensed under the Functional Software License (FSL), Version 1.1, ALv2 Future License
+ * (the "License");
+ *
+ * You may not use this file except in compliance with the License. You may obtain a copy
+ * of the License at https://fsl.software/
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS" AND WITHOUT WARRANTIES OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING WITHOUT LIMITATION WARRANTIES OF FITNESS FOR A PARTICULAR
+ * PURPOSE, MERCHANTABILITY, TITLE OR NON-INFRINGEMENT.
+ *
+ * IN NO EVENT WILL WE HAVE ANY LIABILITY TO YOU ARISING OUT OF OR RELATED TO THE
+ * SOFTWARE, INCLUDING INDIRECT, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES,
+ * EVEN IF WE HAVE BEEN INFORMED OF THEIR POSSIBILITY IN ADVANCE.
+ */
+
+@charset "utf-8";
+
+// Expandable table rows
+// -------------------------------------------------------------------------------------------------
+//
+// Styles for tables with a data-expandable attribute. Expandable rows show a pointer cursor and
+// the toggle chevron rotates when aria-expanded is "true". Behaviour lives in
+// js/bulma-table-expand.js. Full reference: docs/style-guide/tables.md#expandable-rows.
+//
+// Usage:
+// <table data-expandable class="table is-fullwidth is-narrow">
+//   <tbody>
+//     <tr data-expandable-row>
+//       <td>
+//         <button type="button" data-expandable-toggle aria-expanded="false"
+//                 class="button is-ghost is-small px-0">
+//           <span class="icon"><i class="et et-chevron-right"></i></span>
+//         </button>
+//       </td>
+//       <td>…</td>
+//     </tr>
+//     <tr data-expandable-detail class="is-hidden">
+//       <td>…</td>
+//     </tr>
+//   </tbody>
+// </table>
+
+[data-expandable] tr[data-expandable-row] {
+  cursor: pointer;
+
+  [data-expandable-toggle] .icon i {
+    transition: transform 0.2s ease;
+  }
+
+  [data-expandable-toggle][aria-expanded='true'] .icon i {
+    transform: rotate(90deg);
+  }
+}

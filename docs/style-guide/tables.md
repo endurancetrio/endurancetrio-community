@@ -3,14 +3,15 @@
 > Part of the [EnduranceTrio Style Guide](./index.md).
 
 Tables use Bulma's [table](https://bulma.io/documentation/elements/table/) styling. On top of it,
-the project adds a **sortable columns** behaviour. It is opt-in through a `data-*` attribute on the
-`<table>`.
+the project adds two behaviours: **sortable columns** and **expandable rows**. Both are opt-in
+through a `data-*` attribute on the `<table>`, and they work together.
 
 Sources:
 
-| Feature          | Styles                                        | Behaviour                    |
-|------------------|-----------------------------------------------|------------------------------|
-| Sortable columns | `src/scss/elements/endurance-table-sort.scss` | `src/js/bulma-table-sort.js` |
+| Feature          | Styles                                          | Behaviour                      |
+|------------------|-------------------------------------------------|--------------------------------|
+| Sortable columns | `src/scss/elements/endurance-table-sort.scss`   | `src/js/bulma-table-sort.js`   |
+| Expandable rows  | `src/scss/elements/endurance-table-expand.scss` | `src/js/bulma-table-expand.js` |
 
 ## Basic table
 
@@ -84,3 +85,79 @@ attribute value identifies the column; the script only checks that it is present
 
 `th[data-sort]` gets a pointer cursor, `user-select: none`, and `nowrap`. Do not add your own
 cursor styling to sortable headers.
+
+## Expandable rows
+
+Expandable rows behave like the HTML `<details>` element. A row can be expanded to show a
+detail row below it, which is hidden until the user expands the row. This suits longer data that
+would make the table too wide, such as a command's output or a list of splits.
+
+Add `data-expandable` to the table. Each expandable row has `data-expandable-row`, and it is
+directly followed by a detail row with `data-expandable-detail` and the `is-hidden` class.
+
+```html
+<table data-expandable class="table is-fullwidth is-hoverable is-narrow">
+  <thead>
+  <tr>
+    <th></th>
+    <th>Command</th>
+    <th>Status</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr data-expandable-row>
+    <td>
+      <button type="button" data-expandable-toggle aria-expanded="false"
+              class="button is-ghost is-small px-0">
+        <span class="icon"><i class="et et-chevron-right"></i></span>
+      </button>
+    </td>
+    <td><code>prepare</code></td>
+    <td><span class="tag is-small is-success">Succeeded</span></td>
+  </tr>
+  <tr data-expandable-detail class="is-hidden">
+    <td>
+      <pre class="box has-background-dark has-text-light p-3">Command output…</pre>
+    </td>
+  </tr>
+  </tbody>
+</table>
+```
+
+### Behaviour
+
+- Clicking anywhere on an expandable row toggles it. Clicks on links, buttons, form controls and
+  labels inside the row do their own job and do not toggle the row.
+- The toggle button carries `aria-expanded`, which the chevron uses to rotate. Use a real
+  `<button>`, not a link or an icon, so it can be reached with the keyboard.
+- The detail row's `colspan` is set automatically to the number of cells in the row. You do not
+  need to write it.
+- Rows without a toggle button, or without a detail row directly below them, are left alone.
+
+### Attributes
+
+| Attribute                | Applied to                         | Purpose                                              |
+|--------------------------|------------------------------------|------------------------------------------------------|
+| `data-expandable`        | `<table>`                          | Enables the behaviour for the table                  |
+| `data-expandable-row`    | Each row that can expand           | The clickable row                                    |
+| `data-expandable-toggle` | Button inside the row              | Keyboard and visual toggle, carries `aria-expanded`  |
+| `data-expandable-detail` | Detail row, directly after its row | Content shown when expanded; starts with `is-hidden` |
+
+### Tips
+
+- Do not combine `is-striped` with expandable rows. The striping counts detail rows too, so the
+  stripes end up uneven.
+- Keep the toggle button in the first cell so the chevron lines up in every row.
+
+## Sorting and expanding together
+
+`data-sortable` and `data-expandable` can be used on the same table. When the rows are sorted,
+each detail row moves with its parent row, so expanded content stays with the correct item.
+
+```html
+<table data-sortable data-expandable class="table is-fullwidth is-narrow">
+  …
+</table>
+```
+
+Put the sort headers on the data columns, and leave the toggle column without `data-sort`.

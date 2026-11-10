@@ -48,6 +48,7 @@ Inside a `.icon-text` (an icon followed by text), the icon and the text stay ali
 | `.et-arrow-down`           | Material Design Icons         | No                                                                     |
 | `.et-chevron-double-left`  | Material Design Icons         | Yes                                                                    |
 | `.et-chevron-double-right` | Material Design Icons         | Yes                                                                    |
+| `.et-chevron-right`        | Material Design Icons         | No; used by the expand toggle in [Tables](./tables.md#expandable-rows) |
 | `.et-email-newsletter`     | Material Design Icons         | Yes                                                                    |
 | `.et-face-man`             | Material Design Icons         | Yes                                                                    |
 | `.et-face-woman`           | Material Design Icons         | Yes                                                                    |

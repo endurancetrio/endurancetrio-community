@@ -65,7 +65,7 @@ const bulmaTableSort = {
     }
 
     const index = this.getCellIndex(clickedTh);
-    const rows = Array.from(tbody.querySelectorAll('tr'));
+    const rows = Array.from(tbody.querySelectorAll(':scope > tr:not([data-expandable-detail])'));
 
     rows.sort((a, b) => {
       const aVal = (a.querySelector(`td:nth-child(${index})`)?.textContent ?? '').trim();
@@ -80,7 +80,13 @@ const bulmaTableSort = {
       return isAsc ? -result : result;
     });
 
-    rows.forEach((row) => tbody.appendChild(row));
+    rows.forEach((row) => {
+      const detail = row.nextElementSibling;
+      tbody.appendChild(row);
+      if (detail?.hasAttribute('data-expandable-detail')) {
+        tbody.appendChild(detail);
+      }
+    });
   },
 
   /** Returns the 1-based column index of a header cell. */

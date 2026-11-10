@@ -38,6 +38,12 @@
   -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22 id%3D%22mdi-chevron-double-right%22 viewBox%3D%220 0 24 24%22%3E%3Cpath d%3D%22M5.59%2C7.41L7%2C6L13%2C12L7%2C18L5.59%2C16.59L10.17%2C12L5.59%2C7.41M11.59%2C7.41L13%2C6L19%2C12L13%2C18L11.59%2C16.59L16.17%2C12L11.59%2C7.41Z%22 %2F%3E%3C%2Fsvg%3E");
 }
 
+.et-chevron-right {
+  @include et-icon-base;
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22 id%3D%22mdi-chevron-right%22 viewBox%3D%220 0 24 24%22%3E%3Cpath d%3D%22M8.59%2C16.58L13.17%2C12L8.59%2C7.41L10%2C6L16%2C12L10%2C18L8.59%2C16.58Z%22 %2F%3E%3C%2Fsvg%3E");
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22 id%3D%22mdi-chevron-right%22 viewBox%3D%220 0 24 24%22%3E%3Cpath d%3D%22M8.59%2C16.58L13.17%2C12L8.59%2C7.41L10%2C6L16%2C12L10%2C18L8.59%2C16.58Z%22 %2F%3E%3C%2Fsvg%3E");
+}
+
 .et-email-newsletter {
   @include et-icon-base;
   mask-image: url("data:image/svg+xml,%3Csvg xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22 id%3D%22mdi-email-newsletter%22 viewBox%3D%220 0 24 24%22%3E%3Cpath d%3D%22M12 .64L8.23 3H5V5L2.97 6.29C2.39 6.64 2 7.27 2 8V18C2 19.11 2.9 20 4 20H20C21.11 20 22 19.11 22 18V8C22 7.27 21.61 6.64 21.03 6.29L19 5V3H15.77M7 5H17V9.88L12 13L7 9.88M8 6V7.5H16V6M5 7.38V8.63L4 8M19 7.38L20 8L19 8.63M8 8.5V10H16V8.5Z%22 %2F%3E%3C%2Fsvg%3E");

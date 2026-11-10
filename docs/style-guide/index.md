@@ -90,6 +90,7 @@ review checklist are on the [Naming](./naming.md) page.
 | `.endurance-navbar`                              | Component      | `components/endurance-navbar.scss`                                                | [Navbar](./navbar.md)                                  |
 | Tabs (`data-tabs`, `data-tab-content`)           | Component      | `components/endurance-tabs.scss`, `js/bulma-tab.js`                               | [Tabs](./tabs.md)                                      |
 | Sortable tables (`data-sortable`, `data-sort`)   | Element        | `elements/endurance-table-sort.scss`, `js/bulma-table-sort.js`                    | [Tables](./tables.md)                                  |
+| Expandable table rows (`data-expandable`)        | Element        | `elements/endurance-table-expand.scss`, `js/bulma-table-expand.js`                | [Tables](./tables.md)                                  |
 | `.switch` with inner labels (adapted, MIT)       | Form           | `form/endurance-switch-control*.scss`                                             | [Switch Control](./switch-control.md)                  |
 | Modals (`data-modal`)                            | Component      | `js/bulma-modal.js` (Bulma markup)                                                | [Behaviours](./behaviours.md)                          |
 | Navbar burger and language selector              | Behaviour      | `js/bulma-navbar.js`, `js/language-selector.js`                                   | [Behaviours](./behaviours.md)                          |
