@@ -28,32 +28,38 @@ $endurance-navbar-height: 5.2rem !default;
 $endurance-navbar-item-img-max-height: 2.8rem !default;
 
 :root {
-  --bulma-navbar-height: #{$endurance-navbar-height};
+  @include cv.register-vars(
+    (
+      'navbar-height': #{$endurance-navbar-height},
+    )
+  );
 }
 
 .#{iv.$class-prefix}endurance-navbar {
   @extend .#{iv.$class-prefix}navbar;
+  @include cv.register-vars(
+    (
+      'endurance-navbar-item-img-max-height': #{$endurance-navbar-item-img-max-height},
+      'navbar-box-shadow-size': 0 0.25em 0 0,
+    )
+  );
 
-  --navbar-height: #{$endurance-navbar-height};
-  --navbar-item-img-max-height: #{$endurance-navbar-item-img-max-height};
-  --bulma-navbar-box-shadow-size: 0 0.25em 0 0;
-
-  min-height: var(--navbar-height);
+  min-height: cv.getVar('navbar-height');
 
   .#{iv.$class-prefix}navbar-item {
     img,
     svg {
-      max-height: var(--navbar-item-img-max-height);
+      max-height: cv.getVar('endurance-navbar-item-img-max-height');
     }
 
     &.#{iv.$class-prefix}is-tab {
-      min-height: var(--navbar-height);
+      min-height: cv.getVar('navbar-height');
     }
   }
 
   .#{iv.$class-prefix}navbar-brand,
   .#{iv.$class-prefix}navbar-tabs {
-    min-height: var(--navbar-height);
+    min-height: cv.getVar('navbar-height');
   }
 
   a.#{iv.$class-prefix}navbar-item,

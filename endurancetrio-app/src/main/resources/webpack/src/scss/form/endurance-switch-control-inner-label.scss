@@ -23,16 +23,13 @@
 @use 'sass:list';
 
 @use '../utilities/endurance-bulma-utilities' as bu;
-@use './endurance-switch-control';
 
 $switch-inner-label-width-number: 3.5 !default;
 $switch-inner-label-width: $switch-inner-label-width-number * 1em !default;
 $switch-inner-label-padding: 0.2em !default;
 
-.#{bu.$class-prefix}switch-inner-label {
-  @extend .#{bu.$class-prefix}switch;
-
-  #{bu.$class-prefix}input[type='checkbox'] {
+.#{bu.$class-prefix}switch.#{bu.$class-prefix}is-inner-label {
+  input[type='checkbox'] {
     + .#{bu.$class-prefix}check {
       width: $switch-inner-label-width;
 
@@ -46,12 +43,12 @@ $switch-inner-label-padding: 0.2em !default;
     position: relative;
     z-index: 0;
 
-    .#{bu.$class-prefix}control-inner-label {
+    .#{bu.$class-prefix}switch-inner-label {
       font-size: 0.9em;
       font-weight: 500;
     }
 
-    .#{bu.$class-prefix}control-inner-label::before {
+    .#{bu.$class-prefix}switch-inner-label::before {
       content: attr(data-off-label);
       left: 70%;
       pointer-events: none;
@@ -71,7 +68,7 @@ $switch-inner-label-padding: 0.2em !default;
       }
     }
 
-    .#{bu.$class-prefix}control-inner-label::before {
+    .#{bu.$class-prefix}switch-inner-label::before {
       content: attr(data-on-label);
       left: 30%;
     }

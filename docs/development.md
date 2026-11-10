@@ -676,8 +676,12 @@ WEBPACK_OUTPUT_DIR=$(pwd)/endurancetrio-app/target/classes/static \
 
 ### Frontend Styling
 
-- Use [`docs/color-system.md`](./color-system.md) as the canonical guide for frontend color selection
-  and semantic usage.
+- Use the [Style Guide](./style-guide/index.md) as the canonical reference for the frontend
+  components, behaviours, and icons. Its [Colors](./style-guide/colors.md) page is the guide for
+  color selection and semantic usage.
+- Follow the [Naming](./style-guide/naming.md) rules. Project blocks are `endurance-{block}`,
+  elements are `endurance-{block}-{element}`, and modifiers, states and helpers are the global
+  `is-*`/`has-*` classes written next to the block. Never prefix a modifier with `endurance-`.
 - Keep EnduranceTrio palette tokens in
   `endurancetrio-app/src/main/resources/webpack/src/scss/utilities/endurancetrio-variables.scss`.
 - Keep Bulma utility customization in
@@ -686,8 +690,9 @@ WEBPACK_OUTPUT_DIR=$(pwd)/endurancetrio-app/target/classes/static \
   `bulma/sass/utilities`.
 - Import Bulma modules directly when the needed Sass members are outside that wrapper, such as
   `css-variables`, `mixins`, `extends`, or element/component styles.
-- Use the `endurance-` prefix for project-maintained SCSS customizations that adapt Bulma or
-  third-party code, including Klaro, switch-control, and theme entrypoints.
+- Name project CSS custom properties `--bulma-endurance-{block}-{property}` (registered with
+  `cv.register-vars`) and project Sass variables `$endurance-{block}-{property}`. Keep third-party
+  namespaces (Klaro, bulma-switch-control) intact.
 
 ### Controllers, Services and Repositories
 

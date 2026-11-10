@@ -1,4 +1,6 @@
-# EnduranceTrio Color System
+# Colors
+
+> Part of the [EnduranceTrio Style Guide](./index.md).
 
 The EnduranceTrio color system is built on four Material-Design-inspired palettes that extend
 the three brand colors from the logo plus a supporting semantic green.
@@ -166,6 +168,9 @@ The classes set CSS custom properties (`--bulma-text`, `--bulma-text-strong`, `-
 so that Bulma components such as `.title` and `.subtitle` inside these backgrounds automatically
 inherit the correct color via Bulma's own variable cascade.
 
+These are global helpers, so they keep Bulma's `has-` prefix and take no `endurance-` prefix. See
+[Naming](./naming.md) for the helper rules.
+
 ## Bulma Color System Customization
 
 Bulma's neutral shades are supplemented by the grey palette above. The four brand palettes replace
@@ -181,7 +186,7 @@ Bulma's built-in color variables as follows:
 | `$warning`     | Yellow 500    | `#FEDB00` | `hsl(52, 100%, 50%)`  |
 | `$danger`      | Red 500       | `#F9423A` | `hsl(3, 94%, 60%)`    |
 
-The configuration above represents the design system target. The SCSS implementation in `style.scss`
+The configuration above represents the target configuration. The SCSS implementation in `style.scss`
 maps Bulma's variables onto the palette tokens declared in `endurancetrio-variables.scss`.
 
 ## Color Usage Recommendations
@@ -306,14 +311,14 @@ Risky combinations to avoid:
 ## Palette Swatch Reference
 
 A visual reference of all four Material Design palettes with HEX and HSL notation is
-available as a PDF in the `docs/assets` directory:
+available as a PDF in the `docs/style-guide/assets` directory:
 
-[`docs/assets/endurancetrio-color-palettes.pdf`](./assets/endurancetrio-color-palettes.pdf)
+[`docs/style-guide/assets/endurancetrio-color-palettes.pdf`](./assets/endurancetrio-color-palettes.pdf)
 
 ## GIMP and Inkscape Palette File
 
 For image-editing work, the full color system is also available as a single GIMP Palette (`.gpl`)
-file at [`docs/assets/endurancetrio-color-palette.gpl`](./assets/endurancetrio-color-palette.gpl).
+file at [`docs/style-guide/assets/endurancetrio-color-palette.gpl`](./assets/endurancetrio-color-palette.gpl).
 The format is natively supported by both [GIMP](https://www.gimp.org) and
 [Inkscape](https://inkscape.org).
 

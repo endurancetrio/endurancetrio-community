@@ -35,7 +35,7 @@
       <div class="container is-fullhd">
         <div class="endurance-media">
           <div class="endurance-media-left">
-            <div class="endurance-box is is-branded-thick is-b">
+            <div class="endurance-box is-branded-thick">
               <figure class="image is-96x96">
                 <div data-th-if="${athlete.gender().getCode() == 'MALE'}" data-th-remove="tag">
                   <img data-th-replace="~{fragments/svg :: mdi-face-man}" alt="Male athlete icon">
@@ -185,7 +185,7 @@
       >
         <div class="endurance-box is-branded-thin">
           <div class="endurance-media">
-            <div class="endurance-media-left is-og-320x167 ">
+            <div class="endurance-media-left is-og-320x167">
               <img data-th-src="${article.featuredImage}"
                    data-th-alt="${article.title}"
                    alt="Article Title"/>

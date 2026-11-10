@@ -21,6 +21,7 @@
 @charset "utf-8";
 
 @use 'sass:color';
+@use 'bulma/sass/utilities/initial-variables' as iv;
 @use './endurancetrio-variables' as et;
 
 $et-greys: (
@@ -42,7 +43,7 @@ $et-greys: (
   $link-color: if($is-light, et.$et-blue-700, et.$et-blue-300);
   $link-hover-color: if($is-light, et.$et-blue-800, et.$et-blue-200);
 
-  .has-background-grey-#{$name} {
+  .#{iv.$class-prefix}#{iv.$helpers-has-prefix}background-grey-#{$name} {
     --bulma-text: #{$text-color};
     --bulma-text-strong: #{$text-color};
     --bulma-link-text: #{$link-color};

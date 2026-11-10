@@ -85,6 +85,11 @@ migrations, or historical data are fixed directly here and are NOT staged upstre
 - Icon system: SVGs → CSS `mask-image` data URI classes (`.et-{name}`). Add icons in `icons.config.json`, then `npm run generate:icons` (runs automatically via `prebuild:*` hooks)
 - `WEBPACK_OUTPUT_DIR` env var overrides output path (watch mode writes to `target/classes/static/`)
 - Formatting: `npm run format` (ESLint + Prettier)
+- Style guide: [`docs/style-guide/index.md`](docs/style-guide/index.md) documents the palette, the `endurance-*` components, the JS behaviours and the icons. Update the matching page when you add or change one of them.
+- Naming: follow [`docs/style-guide/naming.md`](docs/style-guide/naming.md). Blocks are `endurance-{block}`, elements `endurance-{block}-{element}`, and modifiers/states are the global `is-*`/`has-*` classes written next to the block. Never prefix a modifier with `endurance-`.
+- New SCSS partials must be `@forward`ed in `src/scss/style.scss` to be compiled. Some partials are currently commented out and not compiled (see the style guide's "Not currently enabled" list).
+- Behaviours are `src/js/bulma-*.js` modules (plus `language-selector.js`): each exports an object with `init()`, called from `src/js/script.js`. Hooks are `data-*` attributes, not styling classes.
+- Code adapted from third-party projects keeps the original licence notice in its file header and is listed in the style guide's "Third-Party Code" section.
 
 ## Authentication (API)
 
