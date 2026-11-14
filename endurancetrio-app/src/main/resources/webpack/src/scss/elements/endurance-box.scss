@@ -20,6 +20,7 @@
 
 @charset "utf-8";
 
+@use 'bulma/sass/utilities/css-variables' as cv;
 @use 'bulma/sass/utilities/initial-variables' as iv;
 @use 'bulma/sass/elements/box';
 @use '../utilities/endurancetrio-variables' as et;
@@ -29,8 +30,29 @@ $endurance-box-stripe-height-thin: 1px !default;
 $endurance-box-stripe-height-thick: 6px !default;
 $endurance-box-stripe-height-extra-thick: 9px !default;
 
+/// Border width of an outlined box, matching Bulma's outlined button.
+/// @group endurance-box
+/// @type {Length}
+/// @access public
+$endurance-box-border-width-outlined: max(1px, 0.0625em) !default;
+
+/// Border width of an outlined link box on hover and focus.
+/// @group endurance-box
+/// @type {Length}
+/// @access public
+$endurance-box-border-width-outlined-hover: max(2px, 0.125em) !default;
+
+/// Square pixel sizes available as `is-{N}x{N}` modifiers.
+/// Mirrors Bulma's image sizes plus `256`.
+/// @group endurance-box
+/// @type {List}
+/// @access public
+$endurance-box-dimensions: 16 24 32 48 64 96 128 256 !default;
+
 .#{iv.$class-prefix}endurance-box {
   @extend .#{iv.$class-prefix}box;
+
+  position: relative;
 
   min-height: auto;
 
@@ -105,6 +127,101 @@ $endurance-box-stripe-height-extra-thick: 9px !default;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
+  }
+}
+
+// Light, outlined and square variants.
+//
+// Defined on Bulma's `.box`, so they apply to `.box` and, through the
+// `@extend` above, to `.endurance-box` as well.
+.#{iv.$class-prefix}box {
+  @include cv.register-vars(
+    (
+      'endurance-box-outline-color': #{cv.getVar('text')},
+    )
+  );
+
+  &.#{iv.$class-prefix}is-light {
+    @include cv.register-vars(
+      (
+        'box-background-color': #{cv.getVar('light')},
+        'box-color': #{cv.getVar('light-invert')},
+      )
+    );
+  }
+
+  &.#{iv.$class-prefix}is-outlined {
+    @include cv.register-vars(
+      (
+        'box-background-color': transparent,
+        'box-shadow': none,
+        'box-link-hover-shadow': none,
+        'box-link-active-shadow': none,
+      )
+    );
+
+    border-color: cv.getVar('endurance-box-outline-color');
+    border-style: solid;
+    border-width: $endurance-box-border-width-outlined;
+
+    // A filled outlined box keeps the pale fill.
+    &.#{iv.$class-prefix}is-light {
+      @include cv.register-vars(
+        (
+          'box-background-color': #{cv.getVar('light')},
+        )
+      );
+    }
+  }
+
+  &.#{iv.$class-prefix}is-grey-outlined {
+    @include cv.register-vars(
+      (
+        'box-background-color': transparent,
+        'box-shadow': none,
+        'box-link-hover-shadow': none,
+        'box-link-active-shadow': none,
+      )
+    );
+
+    border-color: et.$et-grey-500;
+    border-style: solid;
+    border-width: $endurance-box-border-width-outlined;
+
+    // A filled outlined box keeps the pale fill.
+    &.#{iv.$class-prefix}is-light {
+      @include cv.register-vars(
+        (
+          'box-background-color': #{cv.getVar('light')},
+        )
+      );
+    }
+  }
+
+  @each $dimension in $endurance-box-dimensions {
+    &.#{iv.$class-prefix}is-#{$dimension}x#{$dimension} {
+      align-items: center;
+      display: flex;
+      flex-shrink: 0;
+      height: $dimension * 1px;
+      justify-content: center;
+      padding: 0;
+      width: $dimension * 1px;
+    }
+  }
+}
+
+a.#{iv.$class-prefix}box.#{iv.$class-prefix}is-outlined {
+  &:hover,
+  &:focus {
+    border-width: $endurance-box-border-width-outlined-hover;
+  }
+}
+
+a.#{iv.$class-prefix}box.#{iv.$class-prefix}is-grey-outlined {
+  &:hover,
+  &:focus {
+    border-width: $endurance-box-border-width-outlined-hover;
   }
 }
 

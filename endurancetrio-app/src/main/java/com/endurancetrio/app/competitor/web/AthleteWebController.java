@@ -33,7 +33,7 @@ import com.endurancetrio.app.common.utils.PaginationUtils;
 import com.endurancetrio.app.config.AppProperties;
 import com.endurancetrio.business.competitor.dto.AthleteDTO;
 import com.endurancetrio.business.competitor.dto.AthleteFilterDTO;
-import com.endurancetrio.business.competitor.dto.AthleteRacesPageDTO;
+import com.endurancetrio.business.competitor.dto.AthleteResultsPageDTO;
 import com.endurancetrio.business.competitor.dto.AthletesPageDTO;
 import com.endurancetrio.business.competitor.enumerator.AthleteLetterRange;
 import com.endurancetrio.business.competitor.service.AthleteService;
@@ -72,7 +72,7 @@ public class AthleteWebController {
   private static final String ATTRIBUTE_PAGINATION_NEXT_URL = "paginationNextUrl";
   private static final String ATTRIBUTE_PAGINATION_PREVIOUS_URL = "paginationPreviousUrl";
   private static final String ATTRIBUTE_PAGINATION_URLS = "paginationUrls";
-  private static final String ATTRIBUTE_RACES = "races";
+  private static final String ATTRIBUTE_RESULTS = "results";
   private static final String VIEW_ATHLETE_PROFILE = "athlete-profile";
   private static final String VIEW_ATHLETES = "athletes";
 
@@ -232,17 +232,16 @@ public class AthleteWebController {
 
     int clampedPage = Math.max(0, page);
     Pageable pageable = PageRequest.of(clampedPage, PROFILE_PAGE_SIZE);
-    AthleteRacesPageDTO athleteRaces = athleteService.getAthleteRaces(id, pageable);
+    AthleteResultsPageDTO athleteResults = athleteService.getAthleteResults(id, pageable);
 
-    InsightPageDTO athleteArticles = insightService.getArticlesByAthleteId(id, Pageable.unpaged(),
-        locale);
+    InsightPageDTO athleteArticles = insightService.getArticlesByAthleteId(id, Pageable.unpaged(), locale);
 
     model.addAttribute(LANGUAGE, locale.getLanguage());
     model.addAttribute(METADATA, metadata);
-    model.addAttribute(PAGINATION, athleteRaces.pagination());
+    model.addAttribute(PAGINATION, athleteResults.pagination());
     model.addAttribute(ATTRIBUTE_ARTICLES, athleteArticles.articles());
     model.addAttribute(ATTRIBUTE_ATHLETE, athlete);
-    model.addAttribute(ATTRIBUTE_RACES, athleteRaces.races());
+    model.addAttribute(ATTRIBUTE_RESULTS, athleteResults.results());
 
     return VIEW_ATHLETE_PROFILE;
   }

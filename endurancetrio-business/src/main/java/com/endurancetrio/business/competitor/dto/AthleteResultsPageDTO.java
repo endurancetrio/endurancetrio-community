@@ -21,14 +21,19 @@
 package com.endurancetrio.business.competitor.dto;
 
 import com.endurancetrio.business.common.dto.PaginationDTO;
-import com.endurancetrio.business.event.dto.RaceDTO;
 import java.util.List;
 
-public record AthleteRacesPageDTO(List<RaceDTO> races, PaginationDTO pagination) {
+/**
+ * A paginated page of {@link AthleteResultDTO results} obtained by an athlete.
+ *
+ * @param results    the results for the current page (never null)
+ * @param pagination the pagination metadata (never null)
+ */
+public record AthleteResultsPageDTO(List<AthleteResultDTO> results, PaginationDTO pagination) {
 
-  public AthleteRacesPageDTO {
-    if (races == null) {
-      throw new IllegalArgumentException("races must not be null");
+  public AthleteResultsPageDTO {
+    if (results == null) {
+      throw new IllegalArgumentException("results must not be null");
     }
     if (pagination == null) {
       throw new IllegalArgumentException("pagination must not be null");

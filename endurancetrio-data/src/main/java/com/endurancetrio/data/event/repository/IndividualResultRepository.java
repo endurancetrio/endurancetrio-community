@@ -21,7 +21,7 @@
 package com.endurancetrio.data.event.repository;
 
 import com.endurancetrio.data.event.model.entity.IndividualResult;
-import com.endurancetrio.data.event.model.entity.Race;
+import java.util.Collection;
 import java.util.List;
 import org.jspecify.annotations.NonNull;
 import org.springframework.data.domain.Page;
@@ -63,34 +63,71 @@ public interface IndividualResultRepository
   List<IndividualResult> findByRaceIdWithGraph(@Param("raceId") Long raceId);
 
   /**
-   * Returns a {@link Page} of IDs of {@link Race races} that have at least one
-   * {@link IndividualResult} recorded for the athlete with the given {@code athleteId}, ordered by
-   * their {@link Race#getDate() date} descending and, as a tiebreaker, by their
-   * {@link Race#getId() id} descending.
+   * Returns the derived {@link IndividualResult individual results} of the athlete with the given
+   * {@code athleteId} whose {@code sourceResult} is among {@code sourceResultIds}, with their race
+   * graph ({@code course → distance, event}) eagerly fetched. The query is intentionally not
+   * paginated: it is only ever called with the IDs of a single page's source results.
    * <p>
-   * This query selects only IDs to avoid the PostgreSQL restriction that ORDER BY expressions
-   * must appear in the SELECT list when DISTINCT is used, which occurs when fetching collections
-   * with JOIN FETCH. It also avoids Hibernate's in-memory pagination warning
-   * ({@code HHH90003004}). Use
-   * {@link RaceRepository#findRacesByIdInWithCoursesAndEvent}
-   * to load the full entity graph for the returned IDs.
+   * The athlete predicate is a guard against violations of the data contract (a derived result
+   * must belong to the same athlete as its source result), so that a corrupt row can never surface
+   * another athlete's result on this athlete's profile.
    *
-   * @param athleteId the ID of the athlete to filter races by
-   * @param pageable  the pagination information
-   * @return a {@link Page} of race IDs for the given athlete, ordered by date and, as a tiebreaker,
-   * by id descending
+   * @param athleteId       the ID of the athlete that must own the derived results
+   * @param sourceResultIds the IDs of the source results
+   * @return the athlete's derived individual results with their race graph
    */
   @Query(
-      value = "SELECT r.id FROM Race r WHERE EXISTS ("
-          + "  SELECT 1 FROM IndividualResult ir "
-          + "  WHERE ir.race = r AND ir.athlete.id = :athleteId"
-          + ") "
-          + "ORDER BY r.date DESC, r.id DESC",
-      countQuery = "SELECT COUNT(r.id) FROM Race r "
-          + "WHERE EXISTS ("
-          + "  SELECT 1 FROM IndividualResult ir "
-          + "  WHERE ir.race = r AND ir.athlete.id = :athleteId"
-          + ")"
+      "SELECT ir FROM IndividualResult ir "
+          + "LEFT JOIN FETCH ir.race r "
+          + "LEFT JOIN FETCH r.courses c "
+          + "LEFT JOIN FETCH c.event e "
+          + "LEFT JOIN FETCH c.distance d "
+          + "WHERE ir.sourceResult.id IN :sourceResultIds AND ir.athlete.id = :athleteId"
   )
-  Page<Long> findRaceIdsByAthleteId(@Param("athleteId") Long athleteId, Pageable pageable);
+  List<IndividualResult> findDerivedResultsBySourceResultIdsWithRaceGraph(
+      @Param("athleteId") Long athleteId,
+      @Param("sourceResultIds") Collection<Long> sourceResultIds
+  );
+
+  /**
+   * Returns the {@link IndividualResult individual results} whose IDs are in {@code ids}, with their
+   * race graph ({@code course → distance, event}) eagerly fetched. The query is intentionally not
+   * paginated: it is only ever called with the IDs of a single page.
+   *
+   * @param ids the IDs of the results to fetch
+   * @return the matching individual results with their race graph
+   */
+  @Query(
+      "SELECT ir FROM IndividualResult ir "
+          + "LEFT JOIN FETCH ir.race r "
+          + "LEFT JOIN FETCH r.courses c "
+          + "LEFT JOIN FETCH c.event e "
+          + "LEFT JOIN FETCH c.distance d "
+          + "WHERE ir.id IN :ids"
+  )
+  List<IndividualResult> findResultsByIdInWithRaceGraph(@Param("ids") Collection<Long> ids);
+
+  /**
+   * Returns a {@link Page} of IDs of the source {@link IndividualResult individual results} of the
+   * athlete with the given {@code athleteId}, ordered by their race date descending and, as a
+   * tiebreaker, by their race reference descending. A source result is one whose
+   * {@code sourceResult} is {@code null}; the results derived from it are resolved separately
+   * through {@link #findDerivedResultsBySourceResultIdsWithRaceGraph(Long, Collection)}.
+   * <p>
+   * Only IDs are selected (no joins, no collection fetch) so SQL {@code LIMIT}/{@code OFFSET} is
+   * safe and no in-memory pagination occurs. The planner drives from
+   * {@code idx_individual_result_athlete_id}.
+   *
+   * @param athleteId the ID of the athlete
+   * @param pageable  the pagination information
+   * @return a {@link Page} of source result IDs for the given athlete
+   */
+  @Query(
+      value = "SELECT ir.id FROM IndividualResult ir "
+          + "WHERE ir.athlete.id = :athleteId AND ir.sourceResult IS NULL "
+          + "ORDER BY ir.race.date DESC, ir.race.raceReference DESC",
+      countQuery = "SELECT COUNT(ir.id) FROM IndividualResult ir "
+          + "WHERE ir.athlete.id = :athleteId AND ir.sourceResult IS NULL"
+  )
+  Page<Long> findSourceResultIdsByAthleteId(@Param("athleteId") Long athleteId, Pageable pageable);
 }

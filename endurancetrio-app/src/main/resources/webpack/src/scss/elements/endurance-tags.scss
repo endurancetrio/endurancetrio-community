@@ -21,10 +21,79 @@
 @charset "utf-8";
 
 @use 'bulma/sass/utilities/css-variables' as cv;
+@use 'bulma/sass/utilities/derived-variables' as dv;
 @use 'bulma/sass/utilities/initial-variables' as iv;
 @use '../utilities/endurancetrio-variables' as et;
 
+/// Height of a small tag, set to the line box of `.is-size-7` text:
+/// `$size-7` times the body line-height (0.75rem × 1.5 = 1.125rem).
+/// @group endurance-tag
+/// @type {Length}
+/// @access public
+$endurance-tag-small-height: calc(#{iv.$size-7} * #{cv.getVar('body-line-height')}) !default;
+
+/// Font-size scale of a small tag, relative to the standard tag.
+/// A standard tag is 2em tall with a 1.5 line-height, so its text fills 75%
+/// of its height. Keeping that ratio in the shorter small tag gives
+/// 0.75 × 0.75rem = 0.5625rem.
+/// @group endurance-tag
+/// @type {Number}
+/// @access public
+$endurance-tag-small-font-scale: 0.75 !default;
+
+/// Horizontal padding of a small tag. The standard tag pads 0.75em, and the
+/// font shrinks by the same scale as the height, so the em value still holds.
+/// @group endurance-tag
+/// @type {Length}
+/// @access public
+$endurance-tag-small-padding-x: 0.75em !default;
+
+/// Border width of an outlined tag, matching Bulma's outlined button.
+/// @group endurance-tag
+/// @type {Length}
+/// @access public
+$endurance-tag-border-width-outlined: max(1px, 0.0625em) !default;
+
+/// Border width of an interactive outlined tag on hover and focus.
+/// @group endurance-tag
+/// @type {Length}
+/// @access public
+$endurance-tag-border-width-outlined-hover: max(2px, 0.125em) !default;
+
 .#{iv.$class-prefix}tag {
+  // Size modifier not provided by Bulma for tags
+  &.#{iv.$class-prefix}is-small {
+    border-radius: cv.getVar('radius-small');
+    font-size: calc(#{cv.getVar('size-small')} * #{$endurance-tag-small-font-scale});
+    height: $endurance-tag-small-height;
+    line-height: cv.getVar('body-line-height');
+    padding: 0 $endurance-tag-small-padding-x;
+  }
+
+  // Outlined variant, mirroring Bulma's `.button.is-outlined`.
+  //
+  // The border and the text share the accessible shade that the light variant
+  // uses for its text, because the solid tag colours (500) do not read as text
+  // on the scheme background. A plain outlined tag keeps its default text
+  // colour, so it renders as a neutral outline.
+  &.#{iv.$class-prefix}is-outlined {
+    background-color: transparent;
+    border-color: currentColor;
+    border-style: solid;
+    border-width: $endurance-tag-border-width-outlined;
+  }
+
+  // Semantic colors take Bulma's light-variant text shade when outlined.
+  @each $name, $pair in dv.$colors {
+    &.#{iv.$class-prefix}is-#{$name}.#{iv.$class-prefix}is-outlined {
+      @include cv.register-vars(
+        (
+          'tag-color-l': #{cv.getVar($name, '', '-light-invert-l')},
+        )
+      );
+    }
+  }
+
   // Single-sport colors
   &.#{iv.$class-prefix}is-swim {
     @include cv.register-vars(
@@ -40,6 +109,14 @@
       @include cv.register-vars(
         (
           'tag-background-l': #{lightness(et.$et-blue-050)},
+          'tag-color-l': #{lightness(et.$et-blue-700)},
+        )
+      );
+    }
+
+    &.#{iv.$class-prefix}is-outlined {
+      @include cv.register-vars(
+        (
           'tag-color-l': #{lightness(et.$et-blue-700)},
         )
       );
@@ -64,6 +141,14 @@
         )
       );
     }
+
+    &.#{iv.$class-prefix}is-outlined {
+      @include cv.register-vars(
+        (
+          'tag-color-l': #{lightness(et.$et-yellow-700)},
+        )
+      );
+    }
   }
 
   &.#{iv.$class-prefix}is-run {
@@ -83,6 +168,38 @@
           'tag-color-l': #{lightness(et.$et-red-700)},
         )
       );
+    }
+
+    &.#{iv.$class-prefix}is-outlined {
+      @include cv.register-vars(
+        (
+          'tag-color-l': #{lightness(et.$et-red-700)},
+        )
+      );
+    }
+  }
+}
+
+// Interactive outlined tags thicken their border, like an outlined button.
+a.#{iv.$class-prefix}tag.#{iv.$class-prefix}is-outlined,
+button.#{iv.$class-prefix}tag.#{iv.$class-prefix}is-outlined,
+.#{iv.$class-prefix}tag.#{iv.$class-prefix}is-hoverable.#{iv.$class-prefix}is-outlined {
+  &:hover,
+  &:focus-visible {
+    border-width: $endurance-tag-border-width-outlined-hover;
+  }
+}
+
+// Overlap outlined tags in a group, so their touching borders read as one line.
+.#{iv.$class-prefix}tags.#{iv.$class-prefix}has-addons {
+  .#{iv.$class-prefix}tag.#{iv.$class-prefix}is-outlined {
+    &:not(:last-child) {
+      margin-inline-end: calc(-1 * #{$endurance-tag-border-width-outlined});
+    }
+
+    &:hover,
+    &:focus-visible {
+      z-index: 2;
     }
   }
 }

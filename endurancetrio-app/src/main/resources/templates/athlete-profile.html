@@ -98,8 +98,7 @@
     </div>
   </section>
 
-  <section data-th-with="RaceType=${T(com.endurancetrio.data.event.model.enumerator.RaceType)}"
-           class="section">
+  <section class="section">
     <div class="container is-fullhd">
       <div data-th-if="${pagination.totalItems() == 0}"
            class="endurance-box is-branded-thin has-text-centered">
@@ -110,43 +109,220 @@
         <h2 data-th-text="#{page.athlete.profile.races.title}" class="title is-2"></h2>
       </div>
 
-      <a data-th-each="race : ${races}"
-         data-th-with="isDerived=${race.raceType == RaceType.INDIVIDUAL_DERIVED || race.raceType == RaceType.TEAM_RELAY_DERIVED || race.raceType == RaceType.MIXED_RELAY_DERIVED}"
-         data-th-href="@{/{lang}/events/{year}/{eventId}/results/{raceId}(lang=${language}, year=${#temporals.year(race.event.startDate)}, eventId=${race.event.id}, raceId=${race.id})}"
-      >
-        <div class="endurance-box is-branded-thin mb-3">
-          <div data-th-classappend="${isDerived} ? 'has-background-grey-100' : p-0"
-               class="box is-shadowless">
-            <div class="endurance-media">
-              <div class="endurance-media-left has-background-grey-600">
-                <p data-th-text="${#temporals.format(race.date, 'dd-MM')}"
-                   data-th-classappend="${isDerived} ? is-6 : is-5"
-                   class="title mb-1">
-                </p>
-                <p data-th-text="${#temporals.format(race.date, 'yyyy')}"
-                   data-th-classappend="${isDerived} ? is-6 : is-5"
-                   class="subtitle mb-0 has-text-weight-bold">
-                </p>
+      <article data-th-each="result : ${results}"
+               data-th-with="event=${result.race().event}, hasDurations=${result.swim() != null || result.firstBike() != null || result.firstRun() != null || result.t1() != null || result.bike() != null || result.t2() != null || result.run() != null || result.secondRun() != null || result.t3() != null || result.secondBike() != null || result.total() != null}"
+               class="endurance-box is-branded-thin">
+        <button data-th-if="${result.rank != null && hasDurations || !#lists.isEmpty(result.derivedResults)}"
+                data-expand
+                aria-expanded="false"
+                aria-label="Toggle details"
+                class="expand is-medium">
+        </button>
+        <div class="endurance-media is-mobile mb-2">
+          <div class="endurance-media-left p-0">
+            <div data-th-text="${result.rank} ?: ${result.penalty}"
+                 class="box is-outlined is-64x64 is-size-5 is-light has-text-weight-bold">
+            </div>
+          </div>
+          <div class="endurance-media-content pr-6">
+            <a data-th-attr="href=${event == null} ? null : @{/{lang}/events/{year}/{eventId}/results/{raceId}(lang=${language}, year=${#temporals.year(event.startDate)}, eventId=${event.id}, raceId=${result.race().id})}">
+              <p data-th-if="${event.title != result.race().title}"
+                 data-th-text="${event.title}"
+                 class="subtitle is-7">
+                Triatlo de Peniche
+              </p>
+              <p data-th-text="${result.race().title}" class="title is-4">Triatlo de Peniche</p>
+              <p data-th-text="${result.race().subtitle}" class="subtitle is-6">Geral</p>
+            </a>
+          </div>
+        </div>
+
+        <div class="level is-mobile mb-0">
+          <div class="level-left">
+            <div class="level-item">
+              <p data-th-text="${#temporals.format(result.race().date, 'LONG')}"
+                 class="is-size-6 is-hidden-mobile">
+                15 de Agosto de 1984
+              </p>
+              <p data-th-text="${#temporals.format(result.race().date, 'dd-MM-yyyy')}"
+                 class="is-size-6 is-hidden-tablet">
+                15-08-1984
+              </p>
+            </div>
+          </div>
+          <div class="level-right">
+            <div class="level-item">
+              <span data-th-if="${!#lists.isEmpty(result.race().sports)}" class="tags has-addons mb-0"
+                    data-th-classappend="${!#lists.isEmpty(result.race().distanceTypes)} ? 'mr-2' : ''">
+                <span data-th-each="sportCode : ${result.race().sports}"
+                      data-th-text="#{sport.__${sportCode}__}"
+                      class="tag is-outlined">
+                  Triathlon
+                </span>
+              </span>
+              <span data-th-if="${!#lists.isEmpty(result.race().distanceTypes)}" class="tags has-addons mb-0">
+                <span data-th-each="distanceType : ${result.race().distanceTypes}"
+                      data-th-text="#{distance.type.__${distanceType}__}"
+                      class="tag is-outlined">
+                  Sprint
+                </span>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div data-th-if="${result.rank != null && hasDurations || !#lists.isEmpty(result.derivedResults)}"
+             data-expand-content
+             class="box is-grey-outlined is-light is-hidden mt-5">
+          <div data-th-if="${!#lists.isEmpty(result.derivedResults)}"
+               data-th-each="derivedResult : ${result.derivedResults}"
+               class="box">
+            <div class="endurance-media is-mobile">
+              <div class="endurance-media-left p-0">
+                <div data-th-text="${derivedResult.rank} ?: ${derivedResult.penalty}"
+                     class="box is-outlined is-64x64 is-size-5 is-light has-text-weight-bold">
+                </div>
               </div>
               <div class="endurance-media-content">
-                <p data-th-text="${race.title}"
-                   data-th-classappend="${isDerived} ? 'has-text-grey-dark is-5' : 'is-3'"
-                   class="title"></p>
-                <p data-th-text="${race.subtitle}"
-                   data-th-classappend="${isDerived} ? 'has-text-grey-dark is-6' : 'is-5'"
-                   class="subtitle"></p>
-                <p class="endurance-media-footer">
-                <span data-th-each="sportCode : ${race.sports}"
-                      data-th-text="#{sport.__${sportCode}__}"
-                      data-th-classappend="${!isDerived} ? 'is-medium'"
-                      class="tag is-link is-light">
-                </span>
-                </p>
+                <a data-th-attr="href=${event == null} ? null : @{/{lang}/events/{year}/{eventId}/results/{raceId}(lang=${language}, year=${#temporals.year(event.startDate)}, eventId=${event.id}, raceId=${derivedResult.race().id})}">
+                  <p data-th-if="${event.title != derivedResult.race().title}"
+                     data-th-text="${event.title}"
+                     class="subtitle is-7">
+                    Triatlo de Peniche
+                  </p>
+                  <p data-th-text="${derivedResult.race().title}" class="title is-4">Triatlo de Peniche</p>
+                  <p data-th-text="${derivedResult.race().subtitle}" class="subtitle is-6">Geral</p>
+                </a>
+              </div>
+            </div>
+          </div>
+          <div data-th-if="${result.rank != null && hasDurations}" class="box">
+            <div class="level is-mobile">
+              <div data-th-if="${result.swim() != null}" class="level-item has-text-centered">
+                <div>
+                  <p data-th-text="#{page.event.results.label.swim}" class="heading is-size-7">
+                    Swim
+                  </p>
+                  <p data-th-text="${T(com.endurancetrio.app.common.utils.DurationFormatter).format(result.swim())}"
+                     class="title is-7">
+                    00:09:00
+                  </p>
+                </div>
+              </div>
+              <div data-th-if="${result.firstBike() != null}" class="level-item has-text-centered">
+                <div>
+                  <p data-th-text="#{page.event.results.label.firstBike}" class="heading is-size-7">
+                    First Bike
+                  </p>
+                  <p data-th-text="${T(com.endurancetrio.app.common.utils.DurationFormatter).format(result.firstBike())}"
+                     class="title is-7">
+                    00:09:00
+                  </p>
+                </div>
+              </div>
+              <div data-th-if="${result.firstRun() != null}" class="level-item has-text-centered">
+                <div>
+                  <p data-th-text="#{page.event.results.label.firstRun}" class="heading is-size-7">
+                    First Run
+                  </p>
+                  <p data-th-text="${T(com.endurancetrio.app.common.utils.DurationFormatter).format(result.firstRun())}"
+                     class="title is-7">
+                    00:09:00
+                  </p>
+                </div>
+              </div>
+              <div data-th-if="${result.t1() != null}" class="level-item has-text-centered">
+                <div>
+                  <p data-th-text="#{page.event.results.label.t1}" class="heading is-size-7">
+                    T1
+                  </p>
+                  <p data-th-text="${T(com.endurancetrio.app.common.utils.DurationFormatter).format(result.t1())}"
+                     class="title is-7">
+                    00:09:00
+                  </p>
+                </div>
+              </div>
+              <div data-th-if="${result.bike() != null}" class="level-item has-text-centered">
+                <div>
+                  <p data-th-text="#{page.event.results.label.bike}" class="heading is-size-7">
+                    Bike
+                  </p>
+                  <p data-th-text="${T(com.endurancetrio.app.common.utils.DurationFormatter).format(result.bike())}"
+                     class="title is-7">
+                    00:09:00
+                  </p>
+                </div>
+              </div>
+              <div data-th-if="${result.t2() != null}" class="level-item has-text-centered">
+                <div>
+                  <p data-th-text="#{page.event.results.label.t2}" class="heading is-size-7">
+                    T2
+                  </p>
+                  <p data-th-text="${T(com.endurancetrio.app.common.utils.DurationFormatter).format(result.t2())}"
+                     class="title is-7">
+                    00:09:00
+                  </p>
+                </div>
+              </div>
+              <div data-th-if="${result.run() != null}" class="level-item has-text-centered">
+                <div>
+                  <p data-th-text="#{page.event.results.label.run}" class="heading is-size-7">
+                    Run
+                  </p>
+                  <p data-th-text="${T(com.endurancetrio.app.common.utils.DurationFormatter).format(result.run())}"
+                     class="title is-7">
+                    00:09:00
+                  </p>
+                </div>
+              </div>
+              <div data-th-if="${result.secondRun() != null}" class="level-item has-text-centered">
+                <div>
+                  <p data-th-text="#{page.event.results.label.secondRun}" class="heading is-size-7">
+                    Second Run
+                  </p>
+                  <p data-th-text="${T(com.endurancetrio.app.common.utils.DurationFormatter).format(result.secondRun())}"
+                     class="title is-7">
+                    00:09:00
+                  </p>
+                </div>
+              </div>
+              <div data-th-if="${result.t3() != null}" class="level-item has-text-centered">
+                <div>
+                  <p data-th-text="#{page.event.results.label.t3}" class="heading is-size-7">
+                    T3
+                  </p>
+                  <p data-th-text="${T(com.endurancetrio.app.common.utils.DurationFormatter).format(result.t3())}"
+                     class="title is-7">
+                    00:09:00
+                  </p>
+                </div>
+              </div>
+              <div data-th-if="${result.secondBike() != null}" class="level-item has-text-centered">
+                <div>
+                  <p data-th-text="#{page.event.results.label.secondBike}" class="heading is-size-7">
+                    Second Bike
+                  </p>
+                  <p data-th-text="${T(com.endurancetrio.app.common.utils.DurationFormatter).format(result.secondBike())}"
+                     class="title is-7">
+                    00:09:00
+                  </p>
+                </div>
+              </div>
+              <div data-th-if="${result.total() != null}" class="level-item has-text-centered">
+                <div>
+                  <p data-th-text="#{page.event.results.label.total}" class="heading is-size-7">
+                    Total
+                  </p>
+                  <p data-th-text="${T(com.endurancetrio.app.common.utils.DurationFormatter).format(result.total())}"
+                     class="title is-7">
+                    00:09:00
+                  </p>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </a>
+      </article>
 
       <nav data-th-if="${pagination.totalPages() > 1}"
            class="pagination is-centered is-rounded" role="navigation"
@@ -196,7 +372,7 @@
                 <p data-th-utext="${article.introText}" data-th-remove="tag"></p>
               </div>
               <div data-th-if="${article.publishedDate != null}" class="endurance-media-footer">
-                <p data-th-text="${#temporals.format(article.publishedDate, 'dd MMMM yyyy')}"></p>
+                <p data-th-text="${#temporals.format(article.publishedDate.toLocalDate(), 'LONG')}"></p>
               </div>
             </div>
           </div>

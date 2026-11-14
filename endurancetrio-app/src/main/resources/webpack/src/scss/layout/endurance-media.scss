@@ -32,7 +32,7 @@
 /// @type {Length}
 /// @access public
 /// @see $endurance-media-left-margin
-$endurance-media-gap: 1.5rem !default;
+$endurance-media-gap: 1rem !default;
 
 /// Vertical gap when stacked (mobile), and left-column margin on mobile.
 /// @group endurance-media
@@ -95,6 +95,35 @@ $endurance-media-dimensions: 16 24 32 48 64 96 128 !default;
 
   @include mx.tablet {
     grid-template-columns: auto 1fr;
+  }
+}
+
+/// Keeps the two-column grid on every viewport.
+///
+/// Mirrors Bulma's `.columns.is-mobile` and `.level.is-mobile`: the layout
+/// stays horizontal on mobile instead of stacking. The left column keeps its
+/// content width and loses the mobile bottom margin.
+///
+/// @example html - Badge beside content on every viewport
+///   <div class="endurance-media is-mobile">
+///     <div class="endurance-media-left p-0">
+///       <div class="box is-outlined is-64x64">3</div>
+///     </div>
+///     <div class="endurance-media-content">
+///       <p class="title is-5">Race title</p>
+///     </div>
+///   </div>
+///
+/// @group endurance-media
+/// @access public
+.#{iv.$class-prefix}endurance-media.#{iv.$class-prefix}is-mobile {
+  @include mx.mobile {
+    grid-template-columns: auto 1fr;
+
+    > .#{iv.$class-prefix}endurance-media-left {
+      margin-bottom: 0;
+      width: auto;
+    }
   }
 }
 

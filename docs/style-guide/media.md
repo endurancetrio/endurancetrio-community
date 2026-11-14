@@ -37,12 +37,29 @@ Source: `src/scss/layout/endurance-media.scss`. Its Sass variables have SassDoc 
 ## Responsive behaviour
 
 - **Mobile:** the two columns stack. The left column takes the full width, with a bottom margin.
+- **Mobile with `.is-mobile`:** the two columns stay side by side. The left column keeps its
+  content width and loses the bottom margin, so a badge stays next to the content at every
+  viewport. The modifier mirrors `.columns.is-mobile` and `.level.is-mobile`.
 - **Tablet and up:** the left column is sized by its content (`auto`), and the content column fills
   the remaining space (`1fr`).
 - **Footer:** the footer is pushed to the bottom of the content column. On mobile it gains a thin
   top border and centred text, so it reads as a separate row.
 - **Long text:** the content column has `min-width: 0`, so long unbroken strings wrap instead of
   pushing the layout wider.
+
+```html
+<div class="endurance-media is-mobile">
+  <div class="endurance-media-left p-0">
+    <div class="box is-outlined is-64x64">3</div>
+  </div>
+  <div class="endurance-media-content">
+    <p class="title is-5">Race title</p>
+  </div>
+</div>
+```
+
+The `p-0` helper removes the left column's padding so the badge sits flush; the grid `column-gap`
+provides the spacing.
 
 ## Left column sizing
 
@@ -106,7 +123,8 @@ The badge has `border-radius` from Bulma's `radius-large` and its padding comes 
 
 ## Choosing between Bulma's media object and this component
 
-| Need                                                                    | Use                |
-|-------------------------------------------------------------------------|--------------------|
-| A simple image-and-text row with no alignment across items              | Bulma `.media`     |
-| Aligned badges or dates in a list, a footer row, or responsive stacking | `.endurance-media` |
+| Need                                                                    | Use                          |
+|-------------------------------------------------------------------------|------------------------------|
+| A simple image-and-text row with no alignment across items              | Bulma `.media`               |
+| Aligned badges or dates in a list, a footer row, or responsive stacking | `.endurance-media`           |
+| A badge that must stay beside the content on mobile too                 | `.endurance-media.is-mobile` |

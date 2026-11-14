@@ -8,10 +8,10 @@ through a `data-*` attribute on the `<table>`, and they work together.
 
 Sources:
 
-| Feature          | Styles                                          | Behaviour                      |
-|------------------|-------------------------------------------------|--------------------------------|
-| Sortable columns | `src/scss/elements/endurance-table-sort.scss`   | `src/js/bulma-table-sort.js`   |
-| Expandable rows  | `src/scss/elements/endurance-table-expand.scss` | `src/js/bulma-table-expand.js` |
+| Feature          | Styles                                                                                        | Behaviour                    |
+|------------------|-----------------------------------------------------------------------------------------------|------------------------------|
+| Sortable columns | `src/scss/elements/endurance-table-sort.scss`                                                 | `src/js/bulma-table-sort.js` |
+| Expandable rows  | `src/scss/elements/endurance-table-expand.scss` (+ `src/scss/elements/endurance-expand.scss`) | `src/js/endurance-expand.js` |
 
 ## Basic table
 
@@ -96,7 +96,7 @@ Add `data-expandable` to the table. Each expandable row has `data-expandable-row
 directly followed by a detail row with `data-expandable-detail` and the `is-hidden` class.
 
 ```html
-<table data-expandable class="table is-fullwidth is-hoverable is-narrow">
+<table class="table is-fullwidth is-hoverable is-narrow">
   <thead>
   <tr>
     <th></th>
@@ -105,17 +105,14 @@ directly followed by a detail row with `data-expandable-detail` and the `is-hidd
   </tr>
   </thead>
   <tbody>
-  <tr data-expandable-row>
+  <tr data-expand-row>
     <td>
-      <button type="button" data-expandable-toggle aria-expanded="false"
-              class="button is-ghost is-small px-0">
-        <span class="icon"><i class="et et-chevron-right"></i></span>
-      </button>
+      <button type="button" data-expand aria-expanded="false" class="expand"></button>
     </td>
     <td><code>prepare</code></td>
     <td><span class="tag is-small is-success">Succeeded</span></td>
   </tr>
-  <tr data-expandable-detail class="is-hidden">
+  <tr data-expand-content class="is-hidden">
     <td>
       <pre class="box has-background-dark has-text-light p-3">Command output…</pre>
     </td>
@@ -126,28 +123,34 @@ directly followed by a detail row with `data-expandable-detail` and the `is-hidd
 
 ### Behaviour
 
-- Clicking anywhere on an expandable row toggles it. Clicks on links, buttons, form controls and
-  labels inside the row do their own job and do not toggle the row.
-- The toggle button carries `aria-expanded`, which the chevron uses to rotate. Use a real
-  `<button>`, not a link or an icon, so it can be reached with the keyboard.
-- The detail row's `colspan` is set automatically to the number of cells in the row. You do not
-  need to write it.
-- Rows without a toggle button, or without a detail row directly below them, are left alone.
+- The trigger (`data-expand`) always toggles on click. Add `data-expand-row` to the row to make
+  the whole row a toggle as well (a convenience for wide rows); clicks on links, buttons, form
+  controls and labels inside the row then do their own job and do not toggle the row. Omitting
+  `data-expand-row` leaves only the button as the trigger.
+- The trigger carries `data-expand` and the `expand`/`close` class (chevron-down / chevron-up);
+  its `aria-expanded` is kept in sync. Use a real `<button>`, not a link or an icon, so it can
+  be reached with the keyboard.
+- The `data-expand-content` row must sit directly below its row. Its `colspan` is set
+  automatically to the number of cells in the row; you do not need to write it.
+- Rows without a `data-expand` trigger, or without a `data-expand-content` row directly below
+  them, are left alone.
 
 ### Attributes
 
-| Attribute                | Applied to                         | Purpose                                              |
-|--------------------------|------------------------------------|------------------------------------------------------|
-| `data-expandable`        | `<table>`                          | Enables the behaviour for the table                  |
-| `data-expandable-row`    | Each row that can expand           | The clickable row                                    |
-| `data-expandable-toggle` | Button inside the row              | Keyboard and visual toggle, carries `aria-expanded`  |
-| `data-expandable-detail` | Detail row, directly after its row | Content shown when expanded; starts with `is-hidden` |
+| Attribute             | Applied to                          | Required? | Purpose                                              |
+|-----------------------|-------------------------------------|-----------|------------------------------------------------------|
+| `data-expand`         | Trigger button (box or table)       | Yes       | Behaviour hook; carries `aria-expanded`              |
+| `data-expand-content` | Region revealed on expand           | Yes       | Content shown when expanded; starts with `is-hidden` |
+| `data-expand-row`     | `<tr>` wrapping the trigger         | No        | Makes the whole row clickable as a toggle            |
 
 ### Tips
 
 - Do not combine `is-striped` with expandable rows. The striping counts detail rows too, so the
   stripes end up uneven.
-- Keep the toggle button in the first cell so the chevron lines up in every row.
+- Keep the trigger in the first cell so the chevron lines up in every row.
+
+The shared expand stylesheet (`src/scss/elements/endurance-expand.scss`) must be loaded for the
+chevron icons to render; it is forwarded from `src/scss/style.scss`.
 
 ## Sorting and expanding together
 

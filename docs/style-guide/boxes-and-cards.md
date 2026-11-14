@@ -6,7 +6,8 @@
 [box](https://bulma.io/documentation/elements/box/) and
 [card](https://bulma.io/documentation/components/card/). Both extend the Bulma class, so every
 Bulma modifier and child element still works. What they add is the branded colour stripe, height
-presets for hero-like blocks, and column layouts that fill their height.
+presets for hero-like blocks, and column layouts that fill their height. The box also gains light
+and outlined variants plus square sizes, and those work on a plain `.box` too.
 
 Source: `src/scss/elements/endurance-box.scss` and `src/scss/components/endurance-card.scss`.
 
@@ -71,6 +72,44 @@ column, so it accepts the same height presets.
 <div class="endurance-box is-branded-thin is-content-top">…</div>
 ```
 
+### Light and outlined variants
+
+These modifiers are defined on the Bulma `.box`, so they work on `.box` and, through the `@extend`,
+on `.endurance-box` as well:
+
+| Class                   | Fill                  | Border                                     | Shadow |
+|-------------------------|-----------------------|--------------------------------------------|--------|
+| `.is-light`             | `--bulma-light` (96%) | none                                       | kept   |
+| `.is-outlined`          | transparent           | `max(1px, 0.0625em)` solid, outline colour | none   |
+| `.is-outlined.is-light` | `--bulma-light` (96%) | `max(1px, 0.0625em)` solid, outline colour | none   |
+| `.is-grey-outlined`     | transparent           | `max(1px, 0.0625em)` solid, grey text colour | none   |
+
+`.is-light` uses the pale `light` palette colour with its dark invert for text, the same
+pale-fill/dark-text idea as `.tag.is-light`. `.is-outlined` replaces the box shadow with a border
+and makes the fill transparent. On an `a.box` the border thickens on hover and focus, like an
+outlined button. The border colour comes from `--bulma-endurance-box-outline-color`, which
+defaults to `--bulma-text`.
+
+```html
+<div class="box is-outlined is-64x64">3</div>
+<div class="box is-light">Light box</div>
+<div class="box is-outlined is-light">Filled outlined box</div>
+```
+
+### Square sizes
+
+`.is-{N}x{N}` fixes a square box at N pixels and centres its content, using the same sizes as
+Bulma's image element plus `256`: `16`, `24`, `32`, `48`, `64`, `96`, `128` and `256`. The list is
+set by the `$endurance-box-dimensions` Sass variable.
+
+```html
+<div class="box is-outlined is-64x64 is-size-4 has-text-weight-bold">3</div>
+```
+
+A sized box has no padding, so keep its content short: a rank, a count, or an icon. The sizes are
+a different axis from the height presets above. Do not combine `is-{N}x{N}` with `.is-small`,
+`.is-medium`, `.is-large` or the viewport-height presets, because those set `min-height` and win.
+
 ### Inside columns
 
 A box placed directly in a Bulma `.column`, or in an `<a>` that is a direct child of a column,
@@ -132,3 +171,25 @@ even when their text lengths differ:
 | A branded container for text, lists or a single block | `.endurance-box`  |
 | An image on top with title and text, as a teaser      | `.endurance-card` |
 | A plain Bulma box without the brand stripe            | `.box`            |
+
+## Expand button
+
+`.expand` and `.close` are shared toggle buttons used by the expand behaviour (`js/endurance-expand.js`).
+They render a chevron-down (`.expand`) or chevron-up (`.close`) icon, are round, and are floated to
+the top-right corner when placed directly inside a `.box` or `.endurance-box`. They are static
+otherwise, e.g. inside a table cell.
+
+```html
+<div class="endurance-box">
+  <button data-expand aria-expanded="false" class="expand is-medium" aria-label="Toggle details"></button>
+
+  <div data-expand-content class="box is-grey-outlined is-light is-hidden">
+    …
+  </div>
+</div>
+```
+
+Sizes: default `1.25rem`, `.is-medium` `1.875rem`, `.is-large` `2.5rem`.
+
+The shared expand stylesheet (`src/scss/elements/endurance-expand.scss`) must be loaded for the
+chevron icons to render; it is forwarded from `src/scss/style.scss`.

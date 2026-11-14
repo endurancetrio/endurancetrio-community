@@ -1,0 +1,110 @@
+/*
+ * Copyright (c) 2011-2026 Ricardo do Canto
+ *
+ * This file is part of the EnduranceTrio project.
+ *
+ * Licensed under the Functional Software License (FSL), Version 1.1, ALv2 Future License
+ * (the "License");
+ *
+ * You may not use this file except in compliance with the License. You may obtain a copy
+ * of the License at https://fsl.software/
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS" AND WITHOUT WARRANTIES OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING WITHOUT LIMITATION WARRANTIES OF FITNESS FOR A PARTICULAR
+ * PURPOSE, MERCHANTABILITY, TITLE OR NON-INFRINGEMENT.
+ *
+ * IN NO EVENT WILL WE HAVE ANY LIABILITY TO YOU ARISING OUT OF OR RELATED TO THE
+ * SOFTWARE, INCLUDING INDIRECT, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES,
+ * EVEN IF WE HAVE BEEN INFORMED OF THEIR POSSIBILITY IN ADVANCE.
+ */
+
+@charset "utf-8";
+
+@use 'bulma/sass/utilities/initial-variables' as iv;
+@use '../utilities/endurancetrio-variables' as et;
+
+// Expand / close toggle button
+// -------------------------------------------------------------------------------------------------
+//
+// Shared button used by the expand behaviour (js/endurance-expand.js) on both boxes and
+// expandable table rows. The chevron-down / chevron-up icons come from the mask-image
+// rules below, so this stylesheet MUST be loaded for the behaviour to render correctly on
+// either component. Full reference: docs/style-guide/boxes-and-cards.md#expand-button and
+// docs/style-guide/tables.md#expandable-rows.
+//
+// The button is static by default (it follows the document flow, as in a table cell). When
+// placed directly inside a `.box` (or `.endurance-box`), it is floated to the top-right
+// corner, like Bulma's `.delete` button on a notification.
+
+.box {
+  position: relative;
+}
+
+.#{iv.$class-prefix}expand,
+.#{iv.$class-prefix}close {
+  --bulma-expand-dimensions: 1.25rem;
+
+  appearance: none;
+  background-color: hsla(var(--bulma-scheme-h), var(--bulma-scheme-s), 0%, 0.1);
+  border: none;
+  border-radius: var(--bulma-radius-rounded);
+  color: et.$et-grey-500;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-grow: 0;
+  flex-shrink: 0;
+  height: var(--bulma-expand-dimensions);
+  max-height: var(--bulma-expand-dimensions);
+  max-width: var(--bulma-expand-dimensions);
+  min-height: var(--bulma-expand-dimensions);
+  min-width: var(--bulma-expand-dimensions);
+  outline: none;
+  vertical-align: top;
+  width: var(--bulma-expand-dimensions);
+}
+
+.box > .#{iv.$class-prefix}expand,
+.box > .#{iv.$class-prefix}close,
+.#{iv.$class-prefix}endurance-box > .#{iv.$class-prefix}expand,
+.#{iv.$class-prefix}endurance-box > .#{iv.$class-prefix}close {
+  position: absolute;
+  top: 1rem;
+  inset-inline-end: 1rem;
+}
+
+.#{iv.$class-prefix}expand::before,
+.#{iv.$class-prefix}close::before {
+  content: '';
+  display: block;
+  width: 100%;
+  height: 100%;
+  background-color: currentColor;
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+}
+
+.#{iv.$class-prefix}expand::before {
+  mask-image: url('data:image/svg+xml,%3Csvg xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22 id%3D%22mdi-chevron-down%22 viewBox%3D%220 0 24 24%22%3E%3Cpath d%3D%22M7.41%2C8.58L12%2C13.17L16.59%2C8.58L18%2C10L12%2C16L6%2C10L7.41%2C8.58Z%22 %2F%3E%3C%2Fsvg%3E');
+  -webkit-mask-image: url('data:image/svg+xml,%3Csvg xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22 id%3D%22mdi-chevron-down%22 viewBox%3D%220 0 24 24%22%3E%3Cpath d%3D%22M7.41%2C8.58L12%2C13.17L16.59%2C8.58L18%2C10L12%2C16L6%2C10L7.41%2C8.58Z%22 %2F%3E%3C%2Fsvg%3E');
+}
+
+.#{iv.$class-prefix}close::before {
+  mask-image: url('data:image/svg+xml,%3Csvg xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22 id%3D%22mdi-chevron-up%22 viewBox%3D%220 0 24 24%22%3E%3Cpath d%3D%22M7.41%2C15.41L12%2C10.83L16.59%2C15.41L18%2C14L12%2C8L6%2C14L7.41%2C15.41Z%22 %2F%3E%3C%2Fsvg%3E');
+  -webkit-mask-image: url('data:image/svg+xml,%3Csvg xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22 id%3D%22mdi-chevron-up%22 viewBox%3D%220 0 24 24%22%3E%3Cpath d%3D%22M7.41%2C15.41L12%2C10.83L16.59%2C15.41L18%2C14L12%2C8L6%2C14L7.41%2C15.41Z%22 %2F%3E%3C%2Fsvg%3E');
+}
+
+.#{iv.$class-prefix}expand.#{iv.$class-prefix}is-medium,
+.#{iv.$class-prefix}close.#{iv.$class-prefix}is-medium {
+  --bulma-expand-dimensions: 1.875rem;
+}
+
+.#{iv.$class-prefix}expand.#{iv.$class-prefix}is-large,
+.#{iv.$class-prefix}close.#{iv.$class-prefix}is-large {
+  --bulma-expand-dimensions: 2.5rem;
+}

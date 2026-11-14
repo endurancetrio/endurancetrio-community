@@ -1,0 +1,21 @@
+@use '../utilities/endurance-bulma-utilities' as bu;
+
+.endurance-accordion-trigger {
+  .et {
+    transition: transform 0.15s ease;
+  }
+
+  &[aria-expanded='true'] .et {
+    transform: rotate(180deg);
+  }
+}
+
+.endurance-accordion-content {
+  border-left: 2px solid bu.$grey-lighter;
+  margin-top: 0.75rem;
+  padding-left: 1.25rem;
+
+  .box {
+    margin-bottom: 0;
+  }
+}

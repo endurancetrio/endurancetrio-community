@@ -23,36 +23,24 @@
 // Expandable table rows
 // -------------------------------------------------------------------------------------------------
 //
-// Styles for tables with a data-expandable attribute. Expandable rows show a pointer cursor and
-// the toggle chevron rotates when aria-expanded is "true". Behaviour lives in
-// js/bulma-table-expand.js. Full reference: docs/style-guide/tables.md#expandable-rows.
+// Styles for tables with expandable rows. The toggle chevron comes from the shared expand
+// button stylesheet (elements/endurance-expand.scss), which MUST be loaded for the chevron
+// icons to render on both tables and boxes. Behaviour lives in js/endurance-expand.js.
+// Full reference: docs/style-guide/tables.md#expandable-rows.
 //
 // Usage:
-// <table data-expandable class="table is-fullwidth is-narrow">
+// <table class="table is-fullwidth is-narrow">
 //   <tbody>
-//     <tr data-expandable-row>
-//       <td>
-//         <button type="button" data-expandable-toggle aria-expanded="false"
-//                 class="button is-ghost is-small px-0">
-//           <span class="icon"><i class="et et-chevron-right"></i></span>
-//         </button>
-//       </td>
+//     <tr data-expand-row>
+//       <td><button type="button" data-expand class="expand"></button></td>
 //       <td>…</td>
 //     </tr>
-//     <tr data-expandable-detail class="is-hidden">
+//     <tr data-expand-content class="is-hidden">
 //       <td>…</td>
 //     </tr>
 //   </tbody>
 // </table>
 
-[data-expandable] tr[data-expandable-row] {
+[data-expand-row] {
   cursor: pointer;
-
-  [data-expandable-toggle] .icon i {
-    transition: transform 0.2s ease;
-  }
-
-  [data-expandable-toggle][aria-expanded='true'] .icon i {
-    transform: rotate(90deg);
-  }
 }

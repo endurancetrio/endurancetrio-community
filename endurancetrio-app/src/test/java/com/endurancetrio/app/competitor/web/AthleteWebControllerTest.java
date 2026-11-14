@@ -41,7 +41,7 @@ import com.endurancetrio.business.common.exception.EnduranceTrioError;
 import com.endurancetrio.business.common.exception.EnduranceTrioException;
 import com.endurancetrio.business.competitor.dto.AthleteDTO;
 import com.endurancetrio.business.competitor.dto.AthleteFilterDTO;
-import com.endurancetrio.business.competitor.dto.AthleteRacesPageDTO;
+import com.endurancetrio.business.competitor.dto.AthleteResultsPageDTO;
 import com.endurancetrio.business.competitor.service.AthleteService;
 import com.endurancetrio.business.insight.dto.InsightPageDTO;
 import com.endurancetrio.business.insight.service.InsightService;
@@ -372,8 +372,8 @@ class AthleteWebControllerTest {
         new AthleteDTO(1L, "Paulo José Paula Carvalho", null, "Paulo Paula Carvalho",
             AthleteGender.MALE, Country.POR, 1961
         ));
-    when(athleteService.getAthleteRaces(eq(1L), any())).thenReturn(
-        new AthleteRacesPageDTO(List.of(),
+    when(athleteService.getAthleteResults(eq(1L), any())).thenReturn(
+        new AthleteResultsPageDTO(List.of(),
             new com.endurancetrio.business.common.dto.PaginationDTO(0, 0, 0, false, false)
         ));
     when(insightService.getArticlesByAthleteId(eq(1L), any(), any())).thenReturn(
@@ -387,7 +387,7 @@ class AthleteWebControllerTest {
         .andExpect(model().attribute("language", "en"))
         .andExpect(model().attributeExists("metadata"))
         .andExpect(model().attributeExists("athlete"))
-        .andExpect(model().attributeExists("races"))
+        .andExpect(model().attributeExists("results"))
         .andExpect(model().attributeExists("pagination"))
         .andExpect(model().attributeExists("articles"));
 
@@ -406,8 +406,8 @@ class AthleteWebControllerTest {
         new AthleteDTO(4L, "Paulo Cavaleiro", null, "Paulo Cavaleiro", AthleteGender.MALE,
             Country.POR, null
         ));
-    when(athleteService.getAthleteRaces(eq(4L), any())).thenReturn(
-        new AthleteRacesPageDTO(List.of(),
+    when(athleteService.getAthleteResults(eq(4L), any())).thenReturn(
+        new AthleteResultsPageDTO(List.of(),
             new com.endurancetrio.business.common.dto.PaginationDTO(0, 0, 0, false, false)
         ));
     when(insightService.getArticlesByAthleteId(eq(4L), any(), any())).thenReturn(
@@ -421,7 +421,7 @@ class AthleteWebControllerTest {
         .andExpect(model().attribute("language", "pt"))
         .andExpect(model().attributeExists("metadata"))
         .andExpect(model().attributeExists("athlete"))
-        .andExpect(model().attributeExists("races"))
+        .andExpect(model().attributeExists("results"))
         .andExpect(model().attributeExists("pagination"))
         .andExpect(model().attributeExists("articles"));
 
@@ -440,8 +440,8 @@ class AthleteWebControllerTest {
         new AthleteDTO(1L, "Paulo José Paula Carvalho", null, "Paulo Paula Carvalho",
             AthleteGender.MALE, Country.POR, 1961
         ));
-    when(athleteService.getAthleteRaces(eq(1L), any())).thenReturn(
-        new AthleteRacesPageDTO(List.of(),
+    when(athleteService.getAthleteResults(eq(1L), any())).thenReturn(
+        new AthleteResultsPageDTO(List.of(),
             new com.endurancetrio.business.common.dto.PaginationDTO(0, 0, 0, false, false)
         ));
     when(insightService.getArticlesByAthleteId(eq(1L), any(), any())).thenReturn(

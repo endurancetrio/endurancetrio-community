@@ -15,7 +15,7 @@ the navbar, see [Tabs](./tabs.md), [Tables](./tables.md), and [Navbar](./navbar.
 | `bulma-navbar.js`       | Yes                        | [Navbar burger](#navbar-burger)         |
 | `bulma-tab.js`          | Yes                        | [Tabs](./tabs.md)                       |
 | `bulma-table-sort.js`   | Yes                        | [Tables](./tables.md#sortable-columns)  |
-| `bulma-table-expand.js` | Yes                        | [Tables](./tables.md#expandable-rows)   |
+| `endurance-expand.js`   | Yes                        | [Boxes](./boxes-and-cards.md#expand-button) and [Tables](./tables.md#expandable-rows) |
 | `language-selector.js`  | Yes                        | [Language selector](#language-selector) |
 | `bulma-panel.js`        | **No**                     | Not active; see the note at the end     |
 

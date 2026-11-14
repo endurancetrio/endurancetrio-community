@@ -23,8 +23,9 @@ package com.endurancetrio.business.competitor.service;
 import com.endurancetrio.business.common.exception.EnduranceTrioException;
 import com.endurancetrio.business.competitor.dto.AthleteDTO;
 import com.endurancetrio.business.competitor.dto.AthleteFilterDTO;
-import com.endurancetrio.business.competitor.dto.AthleteRacesPageDTO;
+import com.endurancetrio.business.competitor.dto.AthleteResultsPageDTO;
 import com.endurancetrio.business.competitor.dto.AthletesPageDTO;
+import com.endurancetrio.data.event.model.entity.IndividualResult;
 import org.springframework.data.domain.Pageable;
 
 /**
@@ -52,12 +53,15 @@ public interface AthleteService {
   AthleteDTO getAthleteById(Long id);
 
   /**
-   * Returns an {@link AthleteRacesPageDTO} containing the paginated list of races for the athlete
-   * with the given ID, ordered by race date descending.
+   * Returns an {@link AthleteResultsPageDTO} containing the paginated list of source results for the
+   * athlete with the given ID. A source result is one whose {@link IndividualResult#getSourceResult() sourceResult}
+   * is {@code null}. Source results are ordered by race date descending and, as a tiebreaker, by
+   * race reference descending. Each source result carries the derived results that were computed
+   * from it, ordered by race reference ascending. Pagination counts source results only.
    *
    * @param athleteId the unique identifier of the athlete
    * @param pageable  the pagination information (page number, page size, etc.)
-   * @return an {@link AthleteRacesPageDTO} with the races for the athlete and pagination metadata
+   * @return an {@link AthleteResultsPageDTO} with the results for the athlete and pagination metadata
    */
-  AthleteRacesPageDTO getAthleteRaces(Long athleteId, Pageable pageable);
+  AthleteResultsPageDTO getAthleteResults(Long athleteId, Pageable pageable);
 }

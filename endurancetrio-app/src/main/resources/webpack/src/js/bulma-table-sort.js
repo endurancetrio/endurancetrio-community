@@ -65,7 +65,7 @@ const bulmaTableSort = {
     }
 
     const index = this.getCellIndex(clickedTh);
-    const rows = Array.from(tbody.querySelectorAll(':scope > tr:not([data-expandable-detail])'));
+    const rows = Array.from(tbody.querySelectorAll(':scope > tr:not([data-expand-content])'));
 
     rows.sort((a, b) => {
       const aVal = (a.querySelector(`td:nth-child(${index})`)?.textContent ?? '').trim();
@@ -83,7 +83,7 @@ const bulmaTableSort = {
     rows.forEach((row) => {
       const detail = row.nextElementSibling;
       tbody.appendChild(row);
-      if (detail?.hasAttribute('data-expandable-detail')) {
+      if (detail?.hasAttribute('data-expand-content')) {
         tbody.appendChild(detail);
       }
     });
